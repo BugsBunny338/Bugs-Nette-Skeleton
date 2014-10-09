@@ -1,0 +1,82 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	    <meta name="keywords" content="">
+	    <meta name="description" content="">
+
+		<title></title>
+
+		<link rel="shortcut icon" href="favicon.ico">
+
+	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/foundation.css" />
+	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/screen.css" />
+	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/tablet.css" />
+	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/desktop.css" />
+
+	    <!--[if IE]>
+	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" />
+	    <![endif]-->
+	    <!--[if (lte IE 8)]>
+	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css">
+	    <![endif]-->
+
+    	{* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" /> *}
+    	{* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css"> *}
+
+		{block head}{/block}
+	</head>
+
+	<body>
+		<script> document.documentElement.className+=' js' </script>
+
+		<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+
+		{include content}
+
+		{block scripts}
+	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.js"></script>
+	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.easings.min.js"></script>
+	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.slimscroll.min.js"></script>
+	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.fullPage.min.js"></script>
+	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.slimscroll.min.js"></script>
+	    <script type="text/javascript" src="{$basePath}/js/foundation.min.js"></script>
+
+		<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+		<script type="text/javascript" src="{$basePath}/js/main.js"></script>
+		<script type="text/javascript">
+			$(document).foundation();
+
+			// if (!Modernizr.touch)
+			// if (!Modernizr.touch && false)
+			// {
+			//   var head = document.getElementsByTagName('head')[0],
+			//       link = document.createElement('link');
+			//   link.rel = 'stylesheet';
+			//   link.type = 'text/css';
+			//   link.href = 'css/jquery.fullPage.css';
+			//   head.appendChild(link);
+
+			//   $('#fullpage').fullpage({
+			//     scrollingSpeed: 700,
+			//     easing: 'easeInQuart',
+			//     verticalCentered: true,
+			//     resize: false,
+			//     anchors: [ ]
+			//   });
+			// }
+
+			// $('#fullpage').slimScroll({
+			//   height: '1000px !important'
+			// });
+		</script>
+		{/block}
+	</body>
+</html>
