@@ -14,7 +14,7 @@
 
 		<title></title>
 
-		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="shortcut icon" href="{$basePath}/favicon.ico">
 
 	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/foundation.css" />
 	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/screen.css" />
@@ -37,9 +37,23 @@
 	<body>
 		<script> document.documentElement.className+=' js' </script>
 
-		<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+		<div class="wrapper">
 
-		{include content}
+		    <div class="row">
+		      <div class="large-12 columns">
+		        <h1>Welcome to Foundation</h1>
+		      </div>
+		    </div>
+
+			<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+
+			{include content}
+
+			<div class="push"></div>
+
+		</div>
+
+		<footer>Stick to bottom!</footer>
 
 		{block scripts}
 	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.js"></script>
