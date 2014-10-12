@@ -68,6 +68,16 @@
 		<script type="text/javascript">
 			$(document).foundation();
 
+			// anchor jscript scroll
+			$('a[href^=#]').click(function(i, el) {
+				var anchorId = $(this).attr('href').substr(1),
+					body = $("body");
+				body.animate({
+					scrollTop: $('#' + anchorId).offset().top
+				}, 400, 'swing', function() { /*callback*/ });
+				return false;
+			});
+			
 			// if (!Modernizr.touch)
 			// if (!Modernizr.touch && false)
 			// {
