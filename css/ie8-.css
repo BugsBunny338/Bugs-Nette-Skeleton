@@ -1,0 +1,23 @@
+
+body {
+	overflow: hidden;
+}
+
+.fallback {
+	z-index: 999;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	color: white;
+	background-image: url(../img/bg-opacity.png);
+}
+
+.fallback p {
+	position: relative;
+	top: 30%;
+	font-size: 20px;
+	text-align: center;
+}
