@@ -5,118 +5,118 @@
 
 <!doctype html>
 <html class="no-js" lang="en">
-	<head>
-		<meta charset="utf-8">
-	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	    <meta name="keywords" content="">
-	    <meta name="description" content="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="">
+    <meta name="description" content="">
 
-		<title></title>
+    <title></title>
 
-		<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico">
 
-		{* top-bar breakpoint set to large; created by SASS *}
-		{* http://truthyfalsey.com/foundation-5-top-bar-breakpoint/ *}
-		{* http://foundation.zurb.com/docs/sass.html *}
-	    {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/app.css" />  *}
-	    {* top-bar breakpoint default by Foundation *}
-	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/foundation.css" /> {*
+    {* top-bar breakpoint set to large; created by SASS *}
+    {* http://truthyfalsey.com/foundation-5-top-bar-breakpoint/ *}
+    {* http://foundation.zurb.com/docs/sass.html *}
+    {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/app.css" />  *}
+    {* top-bar breakpoint default by Foundation *}
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/foundation.css" /> {*
 
-	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/screen.css" />
-	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/tablet.css" />
-	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/desktop.css" />
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/tablet.css" />
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/desktop.css" />
 
-	    <!--[if IE]>
-	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" />
-	    <![endif]-->
-	    <!--[if (lte IE 8)]>
-	    <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css">
-	    <![endif]-->
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" />
+    <![endif]-->
+    <!--[if (lte IE 8)]>
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css">
+    <![endif]-->
 
-    	{* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" /> *}
-    	{* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css"> *}
+    {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" /> *}
+    {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css"> *}
 
-		{block head}{/block}
-	</head>
+    {block head}{/block}
+  </head>
 
-	<body>
-		<script> document.documentElement.className+=' js' </script>
+  <body>
+    <script> document.documentElement.className+=' js' </script>
 
-	    <!--[if (lte IE 8)]>
-	    <div class="fallback">
-	      <p>Používáte starou verzi prohlížeče Internet Explorer.<br><br>Stránky jsou optimalizovány pro Internet Explorer verze 9 a vyšší, Google Chrome, Mozilla Firefox, Safari a některé další moderní prohlížeče.</p>
-	    </div>
-	    <![endif]-->
+    <!--[if (lte IE 8)]>
+    <div class="fallback">
+      <p>Používáte starou verzi prohlížeče Internet Explorer.<br><br>Stránky jsou optimalizovány pro Internet Explorer verze 9 a vyšší, Google Chrome, Mozilla Firefox, Safari a některé další moderní prohlížeče.</p>
+    </div>
+    <![endif]-->
     
-		<div class="wrapper">
+    <div class="wrapper">
 
-		    <div class="row">
-		      <div class="large-12 columns">
-		        <h1>Welcome to Foundation</h1>
-		      </div>
-		    </div>
+      <div class="row">
+        <div class="large-12 columns">
+          <h1>Welcome to Foundation</h1>
+        </div>
+      </div>
 
-			<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+      <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
 
-			{include content}
+      {include content}
 
-			<div class="push"></div>
+      <div class="push"></div>
 
-		</div>
+    </div>
 
-		<footer>Stick to bottom!</footer>
+    <footer>Stick to bottom!</footer>
 
-		{block scripts}
-	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.js"></script>
-	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.easings.min.js"></script>
-	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.slimscroll.min.js"></script>
-	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.fullPage.min.js"></script>
-	    <script type="text/javascript" src="{$basePath}/js/vendor/jquery.slimscroll.min.js"></script>
-	    <script type="text/javascript" src="{$basePath}/js/foundation.min.js"></script>
+    {block scripts}
+      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.js"></script>
+      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.easings.min.js"></script>
+      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.slimscroll.min.js"></script>
+      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.fullPage.min.js"></script>
+      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.slimscroll.min.js"></script>
+      <script type="text/javascript" src="{$basePath}/js/foundation.min.js"></script>
 
-		<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
-		<script type="text/javascript" src="{$basePath}/js/main.js"></script>
-		<script type="text/javascript">
+      <script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+      <script type="text/javascript" src="{$basePath}/js/main.js"></script>
+      <script type="text/javascript">
 
-			$(document).foundation();
+        $(document).foundation();
 
-			// anchor jscript scroll
-			$('a[href^=#]').click(function(i, el) {
-				var anchorId = $(this).attr('href').substr(1),
-					body = $("body");
-				body.animate({
-					scrollTop: $('#' + anchorId).offset().top
-				}, 400, 'swing', function() { /*callback*/ });
-				return false;
-			});
+        // anchor jscript scroll
+        $('a[href^=#]').click(function(i, el) {
+          var anchorId = $(this).attr('href').substr(1),
+            body = $("body");
+          body.animate({
+            scrollTop: $('#' + anchorId).offset().top
+          }, 400, 'swing', function() { /*callback*/ });
+          return false;
+        });
 
-			// (function($) {
-			//   if (!Modernizr.touch)
-			//   if (!Modernizr.touch && false)
-			//   {
-			//     var head = document.getElementsByTagName('head')[0],
-			//         link = document.createElement('link');
-			//     link.rel = 'stylesheet';
-			//     link.type = 'text/css';
-			//     link.href = 'css/jquery.fullPage.css';
-			//     head.appendChild(link);
+        // (function($) {
+        //   if (!Modernizr.touch)
+        //   if (!Modernizr.touch && false)
+        //   {
+        //     var head = document.getElementsByTagName('head')[0],
+        //         link = document.createElement('link');
+        //     link.rel = 'stylesheet';
+        //     link.type = 'text/css';
+        //     link.href = 'css/jquery.fullPage.css';
+        //     head.appendChild(link);
 
-			//     $('#fullpage').fullpage({
-			//       scrollingSpeed: 700,
-			//       easing: 'easeInQuart',
-			//       verticalCentered: true,
-			//       resize: false,
-			//       anchors: [ ]
-			//     });
-			//   }
-			// })(jQuery);
+        //     $('#fullpage').fullpage({
+        //       scrollingSpeed: 700,
+        //       easing: 'easeInQuart',
+        //       verticalCentered: true,
+        //       resize: false,
+        //       anchors: [ ]
+        //     });
+        //   }
+        // })(jQuery);
 
-			$('#fullpage').slimScroll({
-				height: '1000px !important'
-			});
+        $('#fullpage').slimScroll({
+          height: '1000px !important'
+        });
 
-		</script>
-		{/block}
-	</body>
+      </script>
+    {/block}
+  </body>
 </html>
