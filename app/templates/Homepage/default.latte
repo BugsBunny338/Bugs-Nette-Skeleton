@@ -67,6 +67,36 @@
       
       <hr />
               
+      <h5>We bet you&rsquo;ll need a Nette form somewhere:</h5>
+      {form contactForm id => 'form'}
+        <div class="row collapse">
+          <div class="small-3 large-2 columns">
+            <span class="prefix name">Name:</span>
+          </div>
+          <div class="small-9 large-10 columns">
+            {input name}
+          </div>
+        </div>
+        <div class="row collapse">
+          <div class="small-3 large-2 columns">
+            <span class="prefix email">E-mail:</span>
+          </div>
+          <div class="small-9 large-10 columns">
+            {input email}
+          </div>
+        </div>
+        <div class="row collapse">
+          <div class="small-12 columns">
+            {input message placeholder => 'Looking forward to your messages'}
+          </div>
+        </div>
+        <div class="row collapse">
+          <div class="small-12 columns">
+            {input submit class => 'button small right'}
+          </div>
+        </div>
+      {/form}
+
       <h5>We bet you&rsquo;ll need a form somewhere:</h5>
       <form>
         <div class="row">
