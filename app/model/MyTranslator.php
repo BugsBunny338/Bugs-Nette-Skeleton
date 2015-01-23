@@ -4,8 +4,9 @@ class MyTranslator implements \Nette\Localization\ITranslator {
 
     private $lang;
 
-    public function __construct($lang) {
+    public function setLang($lang) {
         $this->lang = $lang;
+        return $this;
     }
 
     public function translate($message, $count = NULL) {
