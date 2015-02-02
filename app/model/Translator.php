@@ -1,6 +1,6 @@
 <?php
 
-class MyTranslator implements \Nette\Localization\ITranslator {
+class Translator implements \Nette\Localization\ITranslator {
 
     private $lang;
 

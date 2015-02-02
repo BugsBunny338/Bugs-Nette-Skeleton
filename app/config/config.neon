@@ -20,9 +20,17 @@ nette:
 	session:
 		expiration: 14 days
 
+	database:
+		dsn: 'mysql:host=localhost;dbname=svj'
+		user: root
+		password: root
+		options:
+			lazy: yes
 
 services:
 	- App\Model\UserManager
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter
-	translator: MyTranslator
+	database: Database
+	translator: Translator
+	#authenticator: Authenticator #depr, use App\Model\UserManger instead

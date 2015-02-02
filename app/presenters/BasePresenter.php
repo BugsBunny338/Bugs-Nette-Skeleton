@@ -17,14 +17,17 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected $languages = array('cs', 'en');
     protected $locale = array('cs' => 'cs_CZ', 'en' => 'en_US');
     protected $dateFormat = array('cs' => '%e. %B %Y', 'en' => '%B %e, %Y');
-    protected $database;
+    protected $db;
 
-    public function __construct(Nette\Database\Context $database)
+    /* database */
+    public function __construct(\Nette\DI\Container $context = NULL)
     {
-        $this->database = $database;
+        parent::__construct($context);
+
+        $this->db = $context->database->context;
     }
 
-	/* translator */
+    /* translator */
     protected function translate($msg) {
         return $this->translator->translate($msg);
     }
