@@ -56,7 +56,6 @@ class Route extends Nette\Object implements Application\IRouter
 	public static $styles = array(
 		'#' => array( // default style for path parameters
 			self::PATTERN => '[^/]+',
-			self::FILTER_IN => 'rawurldecode',
 			self::FILTER_OUT => array(__CLASS__, 'param2path'),
 		),
 		'?#' => array( // default style for query parameters
@@ -150,12 +149,13 @@ class Route extends Nette\Object implements Application\IRouter
 		$re = $this->re;
 
 		if ($this->type === self::HOST) {
-			$path = '//' . $url->getHost() . $url->getPath();
-			$host = array_reverse(explode('.', $url->getHost()));
+			$host = $url->getHost();
+			$path = '//' . $host . $url->getPath();
+			$host = ip2long($host) ? array($host) : array_reverse(explode('.', $host));
 			$re = strtr($re, array(
 				'/%basePath%/' => preg_quote($url->getBasePath(), '#'),
-				'%tld%' => $host[0],
-				'%domain%' => isset($host[1]) ? "$host[1]\\.$host[0]" : $host[0],
+				'%tld%' => preg_quote($host[0], '#'),
+				'%domain%' => preg_quote(isset($host[1]) ? "$host[1].$host[0]" : $host[0], '#'),
 			));
 
 		} elseif ($this->type === self::RELATIVE) {
@@ -170,7 +170,7 @@ class Route extends Nette\Object implements Application\IRouter
 		}
 
 		if ($path !== '') {
-			$path = rtrim($path, '/') . '/';
+			$path = rtrim(rawurldecode($path), '/') . '/';
 		}
 
 		if (!$matches = Strings::match($path, $re)) {
@@ -395,7 +395,8 @@ class Route extends Nette\Object implements Application\IRouter
 			$url = '//' . $refUrl->getAuthority() . $url;
 
 		} else {
-			$host = array_reverse(explode('.', $refUrl->getHost()));
+			$host = $refUrl->getHost();
+			$host = ip2long($host) ? array($host) : array_reverse(explode('.', $host));
 			$url = strtr($url, array(
 				'/%basePath%/' => $refUrl->getBasePath(),
 				'%tld%' => $host[0],
@@ -538,11 +539,6 @@ class Route extends Nette\Object implements Application\IRouter
 				$re = $pattern ? '(?:' . preg_quote($name, '#') . "|$pattern)$re" : preg_quote($name, '#') . $re;
 				$sequence[1] = $name . $sequence[1];
 				continue;
-			}
-
-			// check name (limitation by regexp)
-			if (preg_match('#[^a-z0-9_-]#i', $name)) {
-				throw new Nette\InvalidArgumentException("Parameter name must be alphanumeric string due to limitations of PCRE, '$name' given.");
 			}
 
 			// pattern, condition & metadata
