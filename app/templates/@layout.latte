@@ -103,6 +103,7 @@
                         <!-- Left Nav Section -->
                         <ul class="left">
                             <li{ifCurrent Homepage:* } class="active"{/ifCurrent}><a n:href="Homepage:">Domů</a></li>
+                            <li{ifCurrent Editable:* } class="active"{/ifCurrent}><a n:href="Editable:">Upravitelná</a></li>
                             <li{ifCurrent Events:* } class="active"{/ifCurrent}><a n:href="Events:">Události</a></li>
                             <li class="{if $user->isAllowed(\Authorizator::FILES_RESOURCE, 'manage')}has-dropdown{/if}{ifCurrent Files:* } active{/ifCurrent}">
                                 <a n:href="Files:">Soubory</a>

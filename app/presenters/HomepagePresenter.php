@@ -6,13 +6,8 @@ use Nette,
 	App\Model;
 
 
-class HomepagePresenter extends BugsPagesPresenter
+class HomepagePresenter extends BugsBasePresenter
 {
-	public function renderDefault()
-	{
-		parent::renderDefault();
-	}
-
 	protected function createComponentContactForm()
 	{
 		$form = new Nette\Application\UI\Form;

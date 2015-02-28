@@ -17,3 +17,126 @@ footer,
   line-height: 45px;
   vertical-align: middle;
 }
+
+/*****************************************************************************/
+
+table {
+	width: 100%;
+}
+
+textarea {
+	resize: none;
+}
+
+/*****************************************************************************/
+
+.flash.success {
+	color: #43ac6a;
+}
+
+.flash.warning {
+	color: orange;
+}
+
+.flash.error {
+	color: #f04124;
+}
+
+/*****************************************************************************/
+
+.no-margin {
+	margin: 0;
+}
+
+.hidden {
+	display: none;
+}
+
+table input,
+table select {
+	margin: 0 !important;
+}
+
+.editable + form table th {
+	display: none !important;
+}
+
+.centerAlign {
+	text-align: center;
+}
+
+.smallerFont * {
+	font-size: 12px !important;
+}
+
+.smallerFont td {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+input.smallerFont {
+	height: 25px;
+}
+
+.tiny.button {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+/*****************************************************************************/
+
+.menu {
+	margin-bottom: 20px;
+}
+
+/*****************************************************************************/
+
+.events time {
+	float: right;
+}
+
+/*****************************************************************************/
+
+.files ul {
+}
+
+.files span {
+	font-size: 11px;
+	font-style: italic;
+}
+
+/*****************************************************************************/
+
+.forum table td.fixedWidth {
+	width: 180px;
+	background-color: #f9f9f9;
+}
+
+.forum table td.fixedWidth2 {
+	width: 100px !important;
+}
+
+.forum table .button {
+	width: 96px;
+}
+
+.forum hr {
+	margin: 10px 0 5px 0;
+}
+
+#addPostForm,
+#editPostForm,
+#addCommentForm,
+#editCommentForm {
+	display: none;
+}
+
+.forum table.newPost {
+	display: none;
+}
+
+.forum div.comment {
+	display: inline;
+}
+
+/*****************************************************************************/

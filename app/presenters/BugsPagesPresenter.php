@@ -6,7 +6,7 @@ use Nette,
 	App\Model;
 
 /**
- * Pages presenter for pages loaded entirely from database; pages are editable by admin.
+ * Pages presenter for pages loaded entirely from database.
  */
 abstract class BugsPagesPresenter extends BugsBasePresenter
 {
