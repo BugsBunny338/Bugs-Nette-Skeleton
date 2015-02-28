@@ -1,4 +1,8 @@
 
+body {
+	overflow: hidden; /* prevent scrolling */
+}
+
 .fallback {
 	z-index: 999;
 	display: block;
@@ -8,7 +12,7 @@
 	width: 100%;
 	height: 100%;
 	color: white;
-	background-image: url(../img/bg-opacity.png);
+	background-image: url(../images/bg-opacity.png);
 }
 
 .fallback p {

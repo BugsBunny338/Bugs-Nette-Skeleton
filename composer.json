@@ -6,12 +6,8 @@
 	"license": ["Unlicense"],
 	"authors": [
 		{
-			"name": "David Grudl",
-			"homepage": "http://davidgrudl.com"
-		},
-		{
-			"name": "Nette Community",
-			"homepage": "http://nette.org/contributors"
+			"name": "Jiri Zajic",
+			"homepage": "http://flipcom.cz"
 		}
 	],
 	"require": {
@@ -22,5 +18,13 @@
 	"require-dev": {
 		"nette/tester": "~1.0"
 	},
-	"minimum-stability": "stable"
+	"minimum-stability": "stable",
+    "scripts": {
+        "post-install-cmd": [
+            "bower install"
+        ],
+        "post-update-cmd": [
+            "bower install"
+        ]
+    }
 }

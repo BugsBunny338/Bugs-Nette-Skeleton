@@ -3,15 +3,30 @@
 namespace App\Presenters;
 
 use Nette,
-	App\Model;
+	App\Model,
+	Nette\Environment;
 
 
 /**
- * Sign in/out presenters.
+ * Presenter to handle authorization.
  */
-class SignPresenter extends BasePresenter
+class SignPresenter extends BugsBasePresenter
 {
 
+    protected function startup()
+    {
+        parent::startup();
+
+        if ($this->getUser()->isLoggedIn() && $this->getAction() != 'out')
+        {
+        	$this->redirect('Homepage:');
+        }
+    }
+
+    public function actionIn($redirectTo)
+    {
+    	// just carry the redirectTo parameter
+    }
 
 	/**
 	 * Sign-in form factory.
@@ -20,45 +35,61 @@ class SignPresenter extends BasePresenter
 	protected function createComponentSignInForm()
 	{
 		$form = new Nette\Application\UI\Form;
-		$form->addText('username', 'Username:')
-			->setRequired('Please enter your username.');
+		// $form->addProtection(); // do NOT dare to uncomment this !!! sign:in won't work !!!
+		
+		$form->addText('username', 'Přihlašovací jméno:')
+			->addRule(Nette\Application\UI\Form::EMAIL)
+			->setRequired('Prosím vyplňte uživatelské jméno.');
 
-		$form->addPassword('password', 'Password:')
-			->setRequired('Please enter your password.');
+		$form->addPassword('password', 'Heslo:')
+			->setRequired('Prosím vyplňte heslo.');
 
-		$form->addCheckbox('remember', 'Keep me signed in');
+		// $form->addHidden('url', @$this->request->parameters['url']);
 
-		$form->addSubmit('send', 'Sign in');
+		$form->addCheckbox('remember', ' Zůstat přihlášen');
+
+		$form->addSubmit('send', 'Přihlásit se');
 
 		// call method signInFormSucceeded() on success
 		$form->onSuccess[] = $this->signInFormSucceeded;
 		return $form;
 	}
 
-
-	public function signInFormSucceeded($form, $values)
+	public function signInFormSucceeded($form)
 	{
-		if ($values->remember) {
-			$this->getUser()->setExpiration('14 days', FALSE);
-		} else {
-			$this->getUser()->setExpiration('20 minutes', TRUE);
-		}
-
-		try {
+		try
+		{
+			$values = $form->getValues();
+			if ($values->remember) {
+				$this->getUser()->setExpiration('14 days', FALSE);
+			} else {
+				$this->getUser()->setExpiration('20 minutes', TRUE);
+			}
 			$this->getUser()->login($values->username, $values->password);
-			$this->redirect('Homepage:');
+            $this->flashMessage('Přihlášení bylo úspěšné.');
 
-		} catch (Nette\Security\AuthenticationException $e) {
+			if (strlen($this->getParam('redirectTo')) > 0)
+			{
+				$this->redirect($this->getParam('redirectTo') . ':');
+			}
+			else
+			{
+				$this->redirect('Homepage:');
+			}
+
+		}
+		catch (Nette\Security\AuthenticationException $e)
+		{
 			$form->addError($e->getMessage());
+			$this->flashMessage($e->getMessage(), 'error');
 		}
 	}
 
-
-	public function actionOut()
+	public function renderOut($redirectTo = 'Homepage')
 	{
 		$this->getUser()->logout();
-		$this->flashMessage('You have been signed out.');
-		$this->redirect('in');
+		$this->flashMessage('Byl(a) jste odhlášen(a).');
+		$this->redirect($redirectTo . ':');
 	}
 
 }

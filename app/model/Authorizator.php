@@ -8,91 +8,149 @@ use Nette\Security as NS;
  */
 class Authorizator extends Nette\Object implements NS\IAuthorizator
 {
-    
+
+    const ROLE_GUEST = 'guest';
+    const ROLE_REGISTERED = 'registered';
+    const ROLE_ADMIN = 'admin';
+
+    const PAGES_TABLE = 'pages';
+    const PAGES_RESOURCE = 'page';
+    const USERS_TABLE = 'users';
+    const USERS_RESOURCE = 'user';
+
+    /* ***** EDIT HERE - BEGIN */
+    const EVENTS_TABLE = 'events';
+    const EVENTS_RESOURCE = 'event';
+    const FILES_TABLE = 'files';
+    const FILES_RESOURCE = 'file';
+    const FORUM_TABLE = 'forum';
+    const FORUM_RESOURCE = 'post';
+    /* ***** EDIT HERE - END */
+
     private $db;
-	private $acl;
+    private $acl;
+
     private $resourceToTable = array(
-        'akce' => 'akce',
-        'zprava' => 'forum',
-        'fotka' => 'fotky',
-        'poplatek' => 'poplatky',
-        'album' => 'alba',
-        'nastaveni' => 'nastaveni',
-        'ucet' => 'uzivatele',
-        'uzivatel' => 'uzivatele',
-        'typickaVlastnost' => 'uzivatele',
-        'aktivnost' => 'uzivatele'
+        self::PAGES_RESOURCE => self::PAGES_TABLE,
+        self::USERS_RESOURCE => self::USERS_TABLE,
+
+        /* ***** EDIT HERE - BEGIN */
+        self::EVENTS_RESOURCE => self::EVENTS_TABLE,
+        self::FILES_RESOURCE => self::FILES_TABLE,
+        self::FORUM_RESOURCE => self::FORUM_TABLE
+        /* ***** EDIT HERE - END */
     );
 
-	public function __construct(Nette\Database\Connection $database)
-	{
+    public function __construct(\Nette\DI\Container $context = NULL)
+    {
         $acl = new Nette\Security\Permission;
         
-        $acl->addRole('guest');
-        $acl->addRole('registered', 'guest');
-        $acl->addRole('administrator', 'registered');
+        $acl->addRole(self::ROLE_GUEST);
+        $acl->addRole(self::ROLE_REGISTERED, self::ROLE_GUEST);
+        $acl->addRole(self::ROLE_ADMIN, self::ROLE_REGISTERED);
 
-        $acl->addResource('akce');
-        $acl->addResource('zprava');
-        $acl->addResource('fotka');
-        $acl->addResource('poplatek');
-        $acl->addResource('album');
-        $acl->addResource('nastaveni');
-        $acl->addResource('ucet');
-        $acl->addResource('uzivatel');
-        $acl->addResource('typickaVlastnost');
-        $acl->addResource('aktivnost');
+        $acl->addResource(self::PAGES_RESOURCE);
+        $acl->addResource(self::USERS_RESOURCE);
         
-        $acl->addResource('vlastnictvi'); // pri vkladani novyho Resource muze urcit majitele
+        /* ***** EDIT HERE - BEGIN */
+        $acl->addResource(self::EVENTS_RESOURCE);
+        $acl->addResource(self::FILES_RESOURCE);
+        $acl->addResource(self::FORUM_RESOURCE);
+        /* ***** EDIT HERE - END */
+
+        // $acl->addResource('ownership'); // pri vkladani novyho Resource muze urcit majitele
         
-        $acl->allow('guest', 'akce', 'view');
-        $acl->allow('registered', array('typickaVlastnost', 'aktivnost'), array('view', 'edit'));
-        $acl->allow('registered', 'uzivatel', 'view');
-        $acl->allow('registered', array('akce', 'zprava', 'fotka', 'album'), array('view', 'edit', 'add'));
-        $acl->allow('registered', 'ucet', array('view', 'edit'));
-        $acl->allow('administrator', NS\Permission::ALL, array('view', 'edit', 'add', 'send', 'transfer'));
+        /* ***** EDIT HERE - BEGIN */
+        $acl->allow(self::ROLE_GUEST, self::PAGES_RESOURCE, 'view');
+        $acl->allow(self::ROLE_GUEST, self::FILES_RESOURCE, 'view');
+        $acl->allow(self::ROLE_GUEST, self::EVENTS_RESOURCE, 'view');
+        $acl->allow(self::ROLE_GUEST, self::FORUM_RESOURCE, 'view');
+        $acl->allow(self::ROLE_REGISTERED, self::EVENTS_RESOURCE, array('view', 'add', 'edit', 'delete'));
+        $acl->allow(self::ROLE_REGISTERED, self::FORUM_RESOURCE, array('view', 'add', 'edit', 'delete'));
+        $acl->allow(self::ROLE_REGISTERED, self::USERS_RESOURCE, array('view', 'edit'));
+        $acl->allow(self::ROLE_ADMIN, NS\Permission::ALL, array(
+            'manage', /* also allows to switch role (e.g. registered --> admin) */
+            'view',
+            'viewTheirOwn',
+            'add',
+            'edit',
+            'editTheirOwn',
+            'delete',
+            'deleteTheirOwn'
+        ));
+        /* ***** EDIT HERE - END */
         
         $this->acl = $acl;
-        $this->db = $database;
-	}
+        $this->db = $context->database->context;
+    }
 
-    public function isAllowed($role, $resource, $privilege, $userId, $resourceId)
+    public function isAllowed($role, $resource, $privilege, $userId = NULL, $resourceId = NULL)
     {
-        if ($role == 'registered' && ($privilege == 'edit' || $privilege == 'send')
-                && $resource != 'typickaVlastnost')
-        {   // check ownership too
-            return $this->acl->isAllowed($role, $resource, $privilege) &&
+        // dump($userId);
+        // dump($resourceId);
+
+        if ($role == self::ROLE_REGISTERED)
+        {
+            switch ($privilege)
+            {
+                case 'viewTheirOwn':
+                    $privilege = 'view';
+                    break;
+                case 'editTheirOwn':
+                    $privilege = 'edit';
+                    break;
+                case 'deleteTheirOwn':
+                    $privilege = 'delete';
+                    break;
+                default:
+                    return $this->acl->isAllowed($role, $resource, $privilege);
+            }
+
+            return
+                $this->acl->isAllowed($role, $resource, $privilege) &&
                 $this->isOwner($userId, $this->resourceToTable[$resource], $resourceId);
         }
         else
         {
+            // dump($role);
+            // dump($privilege);
             return $this->acl->isAllowed($role, $resource, $privilege);
         }
     }
     
     private function isOwner($userId, $table, $resourceId)
     {
+        // dump($userId);
+        // dump($resourceId);
+
         if ($userId == NULL || $resourceId == NULL)
         {
             return false;
         }
         else
         {
-            $column = '';
+            $column;
             
             switch ($table)
             {
-                case 'alba':
-                case 'fotky':
-                case 'akce':
-                case 'forum':
-                    $column = 'vlozil';
+                /* ***** EDIT HERE - BEGIN */
+                case self::EVENTS_TABLE:
+                    $column = 'insertedBy';
                     break;
-                case 'uzivatele':
+                case self::FILES_TABLE:
+                    $column = 'owner';
+                    break;
+                case self::FORUM_TABLE:
+                    $column = 'insertedBy';
+                    break;
+                /* ***** EDIT HERE - END */
+                default:
                     $column = 'id';
-                    break;
             }
             
+            // dump($table);
+            // dump($this->db->table('events'));
+
             return $this->db->table($table)->get($resourceId)->$column == $userId;
         }
     }

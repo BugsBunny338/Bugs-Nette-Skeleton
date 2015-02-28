@@ -1,0 +1,12 @@
+mouth					口
+person
+fire
+tree
+mountain
+sun
+moon
+door
+woman
+roof
+king
+water

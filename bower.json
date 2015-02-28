@@ -1,0 +1,22 @@
+{
+  "name": "bugs-nette-skeleton",
+  "version": "0.0.0",
+  "authors": [
+    "Jiri Zajic <jiri.zajic@flipcom.cz>"
+  ],
+  "description": "tbd",
+  "license": "MIT",
+  "homepage": "http://flipcom.cz",
+  "private": true,
+  "dependencies": {
+    "foundation": "~5.4",
+    "tinymce": "~4.0"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

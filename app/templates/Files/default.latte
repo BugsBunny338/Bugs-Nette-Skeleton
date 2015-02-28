@@ -1,0 +1,81 @@
+{block content}
+
+  <div class="row files">
+    <div class="large-12 columns">
+
+      <h1>Soubory ke stažení</h1>
+
+      <hr>
+
+        <h2>Veřejné</h2>
+
+        {if count($public)}
+          <ul>
+            {foreach $public as $file}
+              <li><a n:href="Files:get $file->id">{$file->name}</a> <span>({$file->extension}, popis: {$file->description}, nahráno: {$file->uploaded->format('j. n. Y')})</span></li>
+            {/foreach}
+          </ul>
+        {else}
+          <p>V této sekci nejsou k dispozici žádné soubory ke stažení.</p>
+        {/if}
+
+        <hr>
+
+        <h2>Pro registrované</h2>
+
+        {if $user->isLoggedIn()}
+          {if count($registered)}
+            <ul>
+              {foreach $registered as $file}
+                <li><a n:href="Files:get $file->id">{$file->name}</a> <span>({$file->extension}, popis: {$file->description}, nahráno: {$file->uploaded->format('j. n. Y')})</span></li>
+              {/foreach}
+            </ul>
+          {else}
+            <p>V této sekci nejsou k dispozici žádné soubory ke stažení.</p>
+          {/if}
+        {else}
+          <p>Pro zobrazení všech souborů ke stažení se <a n:href="Sign:in Files">přihlaste</a>.</p>
+        {/if}
+
+        <hr>
+
+        {if $user->isLoggedIn()}
+
+          <h2>Soukromé</h2>
+          
+          {if count($private)}
+            <ul>
+              {foreach $private as $file}
+                <li><a n:href="Files:get $file->id">{$file->name}</a> <span>({$file->extension}, popis: {$file->description}, nahráno: {$file->uploaded->format('j. n. Y')})</span></li>
+              {/foreach}
+            </ul>
+          {else}
+            <p>V této sekci nejsou k dispozici žádné soubory ke stažení.</p>
+          {/if}
+
+          {if $user->isInRole(\Authorizator::ROLE_ADMIN)}
+
+            <hr>
+
+            <h2>Všechny soubory v systému (<a n:href="Files:manage">spravovat</a>)</h2>
+
+            {if count($all)}
+              <ul>
+                {foreach $all as $file}
+                  <li><a n:href="Files:get $file->id">{$file->name}</a> <span>({$file->extension}, popis: {$file->description}, nahráno: {$file->uploaded->format('j. n. Y')})</span></li>
+                {/foreach}
+              </ul>
+            {else}
+              <p>V systému nejsou nahrány žádné soubory.</p>
+            {/if}
+
+          {/if}
+
+        {/if}
+
+      <br>
+
+    </div>
+  </div>
+
+{/block}

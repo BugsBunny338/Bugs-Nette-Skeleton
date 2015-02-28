@@ -21,7 +21,7 @@ nette:
 		expiration: 14 days
 
 	database:
-		dsn: 'mysql:host=localhost;dbname=svj'
+		dsn: 'mysql:host=mysql5-4;dbname=bugs-nette-skeleton'
 		user: root
 		password: root
 		options:
@@ -31,6 +31,6 @@ services:
 	- App\Model\UserManager
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter
-	database: Database
 	translator: Translator
-	#authenticator: Authenticator #depr, use App\Model\UserManger instead
+	database: Database
+	authorizator: Authorizator

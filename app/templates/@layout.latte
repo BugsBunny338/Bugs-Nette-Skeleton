@@ -5,153 +5,218 @@
 
 <!doctype html>
 <html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="keywords" content="">
-    <meta name="description" content="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="">
+        <meta name="description" content="">
 
-    <title></title>
+        <title>Bugs Nette Skeleton</title>
 
-    <link rel="shortcut icon" href="{$basePath}/favicon.ico">
+        {* <link rel="shortcut icon" href="{$basePath}/favicon.ico"> *}
 
-    {* top-bar breakpoint set to large; created by SASS *}
-    {*
-      http://truthyfalsey.com/foundation-5-top-bar-breakpoint/
-      http://foundation.zurb.com/docs/sass.html
-    *}
-    {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/app.css" /> *}
+        {* top-bar breakpoint set to large; created by SASS *}
+        {*
+          http://truthyfalsey.com/foundation-5-top-bar-breakpoint/
+          http://foundation.zurb.com/docs/sass.html
+        *}
+        {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/foundation-custom.css" /> *}
 
-    {* top-bar breakpoint default by Foundation *}
-    <link rel="stylesheet" type="text/css" href="{$basePath}/css/foundation.css" />
+        {* top-bar breakpoint default by Foundation *}
+        <link rel="stylesheet" type="text/css" href="{$basePath}/bower_components/foundation/css/foundation.css" />
 
-    <link rel="stylesheet" type="text/css" href="{$basePath}/css/screen.css" />
-    <link rel="stylesheet" type="text/css" href="{$basePath}/css/tablet.css" />
-    <link rel="stylesheet" type="text/css" href="{$basePath}/css/desktop.css" />
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/screen.css" />
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/tablet.css" />
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/desktop.css" />
 
-    <!--[if IE]>
-    <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" />
-    <![endif]-->
-    <!--[if (lte IE 8)]>
-    <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css">
-    <![endif]-->
+        {* CSS to adjust different languages *}
+        {*
+        {if $lang == 'en'}
+            <link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen-english.css">
+        {/if}
+        *}
 
-    {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" /> *}
-    {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css"> *}
+        <!--[if IE]>
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" />
+        <![endif]-->
+        <!--[if (lte IE 8)]>
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css">
+        <![endif]-->
 
-    {block head}{/block}
-  </head>
+        {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie.css" /> *}
+        {* <link rel="stylesheet" type="text/css" href="{$basePath}/css/ie8-.css"> *}
 
-  <body>
-    <script> document.documentElement.className+=' js' </script>
+        {block head}{/block}
+    </head>
 
-    <!--[if (lte IE 8)]>
-    <div class="fallback">
-      <p>Používáte starou verzi prohlížeče Internet Explorer.<br><br>Stránky jsou optimalizovány pro Internet Explorer verze 9 a vyšší, Google Chrome, Mozilla Firefox, Safari a některé další moderní prohlížeče.</p>
-    </div>
-    <![endif]-->
-    
-    <div class="wrapper">
+    <body>
+        <script> document.documentElement.className+=' js' </script>
 
-      <div class="row">
-        <div class="large-12 columns">
-          <h1>Welcome to Foundation ({_"translated"})</h1>
+        <!--[if (lte IE 8)]>
+        <div class="fallback">
+          <p>Používáte příliš starou verzi prohlížeče Internet Explorer.<br><br>Prosím, aktualizujte svůj prohlížeč na verzi 9 a vyšší; nebo použijte některý z jiných moderních prohlížečů, jako např. Google Chrome, Mozilla Firefox nebo Safari.</p>
         </div>
-      </div>
+        <![endif]-->
+        
+        <div class="wrapper">
 
-      <div class="row">
-        <nav class="top-bar" data-topbar role="navigation">
-          <ul class="title-area">
-            <li class="name">
-              <h1><a href="{$basePath}">My Site</a></h1>
-            </li>
-             <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-            <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-          </ul>
+            <div class="row">
+                <div class="large-12 columns">
+                    <h1>Welcome to Foundation ({_"translated"})</h1>
+                </div>
+            </div>
 
-          <section class="top-bar-section">
-            <!-- Right Nav Section -->
-            <ul class="right">
-              <li class="active"><a href="#">Right Button Active</a></li>
-              <li class="has-dropdown">
-                <a href="#">Right Button Dropdown</a>
-                <ul class="dropdown">
-                  <li><a href="#">First link in dropdown</a></li>
-                  <li class="active"><a href="#">Active link in dropdown</a></li>
-                </ul>
-              </li>
-            </ul>
+            <div class="row menu">
+                <nav class="top-bar" data-topbar role="navigation">
+                    <ul class="title-area">
+                        <li class="name">
+                            <h1><a n:href="Homepage:default">SVJ</a></h1>
+                        </li>
+                        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+                    </ul>
 
-            <!-- Left Nav Section -->
-            <ul class="left">
-              <li><a href="#">Left Nav Button</a></li>
-            </ul>
-          </section>
-        </nav>
-      </div>
+                    <section class="top-bar-section">
 
-      <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+                        <!-- Right Nav Section -->
+                        <ul class="right">
+                            {if $user->isLoggedIn()}
+                                {if $user->isAllowed(\Authorizator::USERS_RESOURCE, 'manage')}
+                                    <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:">Uživatelé</a></li>
+                                {else}
+                                    <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:edit $user->id">Nastavení</a></li>
+                                {/if}
+                                <li><a n:href="Sign:out $presenter">Odhlásit se</a></li>
+                            {else}
+                                <li{ifCurrent Sign:* } class="active"{/ifCurrent}><a n:href="Sign:in">Přihlášení</a></li>
+                            {/if}
+                            <li class="has-dropdown">
+                                <a href="{link this 'lang' => 'cs'}">&nbsp;</a>
+                                <ul class="dropdown">
+                                    {if $lang != 'cs'}<li><a href="{link this 'lang' => 'cs'}">česky</a></li>{/if}
+                                    {if $lang != 'en'}<li><a href="{link this 'lang' => 'en'}">English</a></li>{/if}
+                                </ul>
+                            </li>
+                        </ul>
 
-      {include content}
+                        <!-- Left Nav Section -->
+                        <ul class="left">
+                            <li{ifCurrent Homepage:* } class="active"{/ifCurrent}><a n:href="Homepage:">Domů</a></li>
+                            <li{ifCurrent Events:* } class="active"{/ifCurrent}><a n:href="Events:">Události</a></li>
+                            <li class="{if $user->isAllowed(\Authorizator::FILES_RESOURCE, 'manage')}has-dropdown{/if}{ifCurrent Files:* } active{/ifCurrent}">
+                                <a n:href="Files:">Soubory</a>
+                                <ul class="dropdown">
+                                    <li{ifCurrent Files:manage } class="active"{/ifCurrent}><a n:href="Files:manage">Spravovat soubory</a></li>
+                                    <li{ifCurrent Files:upload } class="active"{/ifCurrent}><a n:href="Files:upload">Nahrát soubor</a></li>
+                                </ul>
+                            </li>
+                            <li{ifCurrent Forum:* } class="active"{/ifCurrent}><a n:href="Forum:">Fórum</a></li>
+                            <li{ifCurrent Langs:* } class="active"{/ifCurrent}><a n:href="Langs:">Jazyky</a></li>
+                        </ul>
+                    </section>
+                </nav>
+            </div>
 
-      <div class="push"></div>
+            <div n:if="$flashes" class="row panel">
+                <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+            </div>
 
-    </div>
+            {include content}
 
-    <div class="row">
-      <footer>2015 &copy; <a href="http://www.flipcom.cz" alt="Flipcom - IT Advisory">Flipcom - IT Advisory</footer>
-    </div>
+            <div class="push"></div>
 
-    {block scripts}
-      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.js"></script>
-      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.easings.min.js"></script>
-      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.slimscroll.min.js"></script>
-      <script type="text/javascript" src="{$basePath}/js/vendor/jquery.fullPage.min.js"></script>
-      <script type="text/javascript" src="{$basePath}/js/foundation.min.js"></script>
+        </div>
 
-      <script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
-      <script type="text/javascript" src="{$basePath}/js/main.js"></script>
-      <script type="text/javascript">
+        <div class="row">
+            <footer>&copy; 2015 <a href="http://www.flipcom.cz" title="Flipcom - IT Advisory"><img src="{$basePath}/images/flipcom-minilogo.png" alt="Flipcom - IT Advisory" style="margin-top: -2px"> Flipcom - IT Advisory</a></footer>
+        </div>
 
-        $(document).foundation();
+        {block scripts}
+            <script type="text/javascript" src="{$basePath}/bower_components/jquery/dist/jquery.min.js"></script>
+            <script type="text/javascript" src="{$basePath}/bower_components/modernizr/modernizr.js"></script>
+            <script type="text/javascript" src="{$basePath}/bower_components/foundation/js/foundation.min.js"></script>
+            <script type="text/javascript" src="{$basePath}/bower_components/tinymce/tinymce.min.js"></script>
 
-        // anchor jscript scroll
-        $('a[href^=#]').click(function(i, el) {
-          var anchorId = $(this).attr('href').substr(1),
-            body = $("body");
-          body.animate({
-            scrollTop: $('#' + anchorId).offset().top
-          }, 400, 'swing', function() { /*callback*/ });
-          return false;
-        });
+            <script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+            <script type="text/javascript" src="{$basePath}/js/main.js"></script>
 
-        // (function($) {
-        //   if (!Modernizr.touch)
-        //   if (!Modernizr.touch && false)
-        //   {
-        //     var head = document.getElementsByTagName('head')[0],
-        //         link = document.createElement('link');
-        //     link.rel = 'stylesheet';
-        //     link.type = 'text/css';
-        //     link.href = 'css/jquery.fullPage.css';
-        //     head.appendChild(link);
+            <script type="text/javascript">
 
-        //     $('#fullpage').fullpage({
-        //       scrollingSpeed: 700,
-        //       easing: 'easeInQuart',
-        //       verticalCentered: true,
-        //       resize: false,
-        //       anchors: [ ]
-        //     });
-        //   }
-        // })(jQuery);
+                // foundation
+                $(document).foundation();
 
-        // $('#fullpage').slimScroll({
-        //   height: '1000px !important'
-        // });
+                // tinyMCE init
+                var plugins = ["textcolor", "paste", "hr"],
+                    toolbar = "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | styleselect | forecolor | hr";
+                var tinymceInit = function() {
+                    tinymce.init({
+                        selector: "div.editable",
+                        inline: true,
+                        menubar: false,
+                        toolbar: toolbar,
+                        // valid_elements: 'h1,h2,hr,p,strong,span',
+                        plugins: plugins,
+                        paste_auto_cleanup_on_paste: true
+                        // , entity_encoding: 'raw'
+                    });
+                    tinymce.init({
+                        selector: "textarea.editable",
+                        inline: false,
+                        menubar: false,
+                        toolbar: toolbar,
+                        // valid_elements: 'h1,h2,hr,p,strong,span',
+                        plugins: plugins,
+                        paste_auto_cleanup_on_paste: true
+                        // , entity_encoding: 'raw'
+                    });
+                };
+                tinymceInit();
 
-      </script>
-    {/block}
-  </body>
+                // on editProjectForm submit
+                $('#editPageForm').submit(function(event) {
+                    $(this).find('input[name="contents"]').val($('.editable').html());
+                });
+
+                // on addPostForm submit
+                $('#addPostForm').submit(function(event) {
+                    $(this).find('input[name="text"]').val(tinymce.activeEditor.getContent());
+                });
+
+                // on editPostForm submit
+                var editPostFormSubmit = function() {
+                    var prefix = 'post-',
+                        that = this;
+                    $('#editPostForm').submit(function(event) {
+                        $(this).find('input[name="id"]').val($(that).parents('table').attr('id').substr(prefix.length));
+                        $(this).find('input[name="text"]').val(tinymce.activeEditor.getContent());
+                    });
+                    $('#editPostForm input[type=submit]').click();
+                };
+
+                // on addCommentForm submit
+                var addCommentFormSubmit = function() {
+                    var prefix = 'post-'; // post prefix here, not comment --> adding comment to post
+                    var that = this;
+                    $('#addCommentForm').submit(function(event) {
+                        $(this).find('input[name="parent"]').val($(that).parents('table').attr('id').substr(prefix.length));
+                        $(this).find('input[name="text"]').val($(that).parents('tr').find('input').first().val());
+                    });
+                    $('#addCommentForm input[type=submit]').click();
+                };
+
+                // on editCommentForm submit
+                var editCommentFormSubmit = function() {
+                    var prefix = 'comment-';
+                    var that = this;
+                    $('#editCommentForm').submit(function(event) {
+                        $(this).find('input[name="id"]').val($(that).parents('tr').attr('id').substr(prefix.length));
+                        $(this).find('input[name="text"]').val($(that).parents('tr').find('input').first().val());
+                    });
+                    $('#editCommentForm input[type=submit]').click();
+                };
+
+            </script>
+        {/block}
+    </body>
 </html>

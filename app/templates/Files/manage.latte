@@ -1,0 +1,47 @@
+{block content}
+
+<div class="row">
+    <div class="large-12 columns">
+
+        <h2>Správa souborů</h2>
+
+        {if count($files)}
+
+            <table>
+            	<tr>
+    	        	<th>Název</th>
+    	        	<th>Popis</th>
+    	        	<th>Nahráno&nbsp;kdy</th>
+    	        	<th>Nahráno&nbsp;kým</th>
+    	        	<th>Vlastník</th>
+    	        	<th>Skupina</th>
+    	        	<th></th>
+            	</tr>
+            	{foreach $files as $file}
+            		{var $uploadedBy = $users[$file->uploadedBy]}
+            		{var $owner = $users[$file->owner]}
+            		<tr>
+            			<td><a n:href="Files:get $file->id">{$file->name}.{$file->extension}</a></td>
+            			<td>{$file->description}</td>
+            			<td>{$file->uploaded}</td>
+            			<td>{$uploadedBy->surname},&nbsp;{$uploadedBy->name}<br>({$uploadedBy->username})</td>
+            			<td>{$owner->surname},&nbsp;{$owner->name}<br>({$owner->username})</td>
+            			<td>{$file->group}</td>
+            			<td><a n:href="Files:edit $file->id" class="small secondary button no-margin">upravit</a></td>
+            			<td><a n:href="Files:delete $file->id" class="small alert button no-margin confirm">smazat</a></td>
+            		</tr>
+            	{/foreach}
+            </table>
+
+        {else}
+
+            <hr>
+
+            <p class="centerAlign no-margin"><a n:href="Files:upload" class="button small">Nahrát soubor</a></p>
+
+            <p>V databázi nejsou nahrány žádné soubory.</p>
+
+        {/if}
+
+    </div>
+  </div>

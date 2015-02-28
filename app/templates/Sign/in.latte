@@ -1,6 +1,44 @@
 {block content}
-<h1 n:block=title>Sign in</h1>
 
-{control signInForm}
+  <div class="row">
+    <div class="large-12 columns">
 
-{* or use {include '../components/form.latte', form => signInForm} *}
+      <h1>Přihlášení</h1>
+
+      <hr>
+
+      <p>přihlašovací jméno: jiri.zajic@flipcom.cz, heslo: admin</p>
+
+      {form signInForm}
+        <div class="row collapse">
+          <div class="small-5 large-2 columns">
+            <span class="prefix name">Přihlašovací jméno:</span>
+          </div>
+          <div class="small-7 large-10 columns">
+            {input username placeholder => 'jan.novak@domena.com'}
+          </div>
+        </div>
+        <div class="row collapse">
+          <div class="small-5 large-2 columns">
+            <span class="prefix email">Heslo:</span>
+          </div>
+          <div class="small-7 large-10 columns">
+            {input password}
+          </div>
+        </div>
+        {* <div class="row collapse">
+          <div class="small-12 columns">
+            {input remember}
+          </div>
+        </div> *}
+        <div class="row collapse">
+          <div class="small-12 columns">
+            {input send class => 'button small right'}
+          </div>
+        </div>
+      {/form}
+      
+    </div>
+  </div>
+
+{/block}
