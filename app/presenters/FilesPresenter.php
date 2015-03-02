@@ -3,42 +3,44 @@
 namespace App\Presenters;
 
 use Nette,
-	App\Model;
+	App\Model,
+    \Authorizator,
+    Nette\Application\UI\Form;
 
 
 class FilesPresenter extends BugsBasePresenter
 {
-	const UPLOAD_PATH = 'upload/files';
+	const UPLOAD_PATH = self::UPLOAD_FOLDER . '/files';
 
 	public function renderDefault()
 	{
-        if (!$this->user->isAllowed(\Authorizator::FILES_RESOURCE, 'view'))
+        if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'view'))
         {
             $this->flashMessage("K prohlížení této sekce nemáš oprávnění!", 'warning');
             $this->redirectHome();
         }
 
-		$guest = $this->db->table(\Authorizator::FILES_TABLE)->where(array(
-            'group' => \Authorizator::ROLE_GUEST,
+		$guest = $this->db->table(Authorizator::FILES_TABLE)->where(array(
+            'group' => Authorizator::ROLE_GUEST,
             self::DELETED_COLUMN => FALSE
         ))->fetchAll();
 		usort($guest, array($this, 'sortFilesByName'));
 		$this->template->public = $guest;
 
-		$registered = $this->db->table(\Authorizator::FILES_TABLE)->where(array(
-			'group' => \Authorizator::ROLE_REGISTERED,
+		$registered = $this->db->table(Authorizator::FILES_TABLE)->where(array(
+			'group' => Authorizator::ROLE_REGISTERED,
             self::DELETED_COLUMN => FALSE
 		));
 		$this->template->registered = $registered;
 
-		$private = $this->db->table(\Authorizator::FILES_TABLE)->where(array(
+		$private = $this->db->table(Authorizator::FILES_TABLE)->where(array(
 			'owner' => $this->user->id,
 			'group' => '',
             self::DELETED_COLUMN => FALSE
 		));
 		$this->template->private = $private;
 
-		$all = $this->db->table(\Authorizator::FILES_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
+		$all = $this->db->table(Authorizator::FILES_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
 		$this->template->all = $all;
 
 		$this->template->uploadPath = self::UPLOAD_PATH;
@@ -46,24 +48,33 @@ class FilesPresenter extends BugsBasePresenter
 
 	public function renderManage()
 	{
-		if (!$this->user->isAllowed(\Authorizator::FILES_RESOURCE, 'manage'))
+		if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'manage'))
 		{
 			$this->flashMessage('Ke správě souborů nemáš oprávnění!', 'warning');
-			$this->redirectHome();
+			$this->redirectHere();
 		}
 
-		$this->template->files = $this->db->table(\Authorizator::FILES_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
-		$this->template->users = $this->db->table(\Authorizator::USERS_TABLE);
+		$this->template->files = $this->db->table(Authorizator::FILES_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
+		$this->template->users = $this->db->table(Authorizator::USERS_TABLE);
 	}
+
+    public function renderUpload()
+    {
+        if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'manage'))
+        {
+            $this->flashMessage('K nahrávání souborů nemáš oprávnění!', 'warning');
+            $this->redirectHere();
+        }
+    }
 
     protected function createComponentUploadFileForm()
     {
-        $form = new Nette\Application\UI\Form;
+        $form = new Form;
         $form->addProtection();
 
         $form->addHidden('uploadedBy', $this->user->id);
 
-        $users = $this->db->table(\Authorizator::USERS_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
+        $users = $this->db->table(Authorizator::USERS_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
         $owners = array();
 
         foreach ($users as $user)
@@ -72,7 +83,7 @@ class FilesPresenter extends BugsBasePresenter
         }
 
         $form->addText('name', 'Název:')
-            ->addRule(Nette\Application\UI\Form::MAX_LENGTH, 'Maximální délka názvu je %d znaků.', 30)
+            ->addRule(Form::MAX_LENGTH, 'Maximální délka názvu je %d znaků.', 30)
             ->setRequired();
         $form->addTextarea('description', 'Popis:', NULL, 3);
         $form->addUpload('file', 'Soubor:')
@@ -82,8 +93,8 @@ class FilesPresenter extends BugsBasePresenter
         	->setRequired();
     	$form->addSelect('group', 'Skupina:', array(
     		NULL => '-',
-    		\Authorizator::ROLE_GUEST => 'host',
-    		\Authorizator::ROLE_REGISTERED => 'registrovaný'
+    		Authorizator::ROLE_GUEST => 'host',
+    		Authorizator::ROLE_REGISTERED => 'registrovaný'
 		));
 
         $form->addSubmit('submit', 'Nahrát')
@@ -101,7 +112,7 @@ class FilesPresenter extends BugsBasePresenter
     public function uploadFileFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(\Authorizator::FILES_RESOURCE, 'manage'))
+        if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'manage'))
         {
             $this->flashMessage("Ke správě souborů nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -116,7 +127,7 @@ class FilesPresenter extends BugsBasePresenter
 	        try
 	        {
 	        	// upload and add extension to $values
-	            $row = $this->db->table(\Authorizator::FILES_TABLE)->insert($values);
+	            $row = $this->db->table(Authorizator::FILES_TABLE)->insert($values);
 	        	$file->move(self::UPLOAD_PATH . '/' . $row->id . '.' . $values->extension);
 	            $this->flashMessage('Soubor nahrán!', 'success');
 	            $this->redirectHere('manage');
@@ -136,23 +147,23 @@ class FilesPresenter extends BugsBasePresenter
 
 	public function renderEdit($id)
 	{
-		if (!$this->user->isAllowed(\Authorizator::FILES_RESOURCE, 'editTheirOwn', $this->user->id, $id))
+		if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'editTheirOwn', $this->user->id, $id))
 		{
 			$this->flashMessage('K editaci tohoto souboru nemáte oprávnění!', 'warning');
 			$this->redirectHere('manage');
 		}
 
-		$this->template->file = $this->db->table(\Authorizator::FILES_TABLE)->get($id);
+		$this->template->file = $this->db->table(Authorizator::FILES_TABLE)->get($id);
 	}
 
     protected function createComponentEditFileForm()
     {
-        $form = new Nette\Application\UI\Form;
+        $form = new Form;
         $form->addProtection();
 
         $id = $this->getParam('id');
-        $file = $this->db->table(\Authorizator::FILES_TABLE)->get($id);
-        $users = $this->db->table(\Authorizator::USERS_TABLE)->fetchAll();
+        $file = $this->db->table(Authorizator::FILES_TABLE)->get($id);
+        $users = $this->db->table(Authorizator::USERS_TABLE)->fetchAll();
         $owners = array();
 
         foreach ($users as $user)
@@ -162,7 +173,7 @@ class FilesPresenter extends BugsBasePresenter
 
         $form->addHidden('id', $id);
         $form->addText('name', 'Název:')
-            ->addRule(Nette\Application\UI\Form::MAX_LENGTH, 'Maximální délka názvu je %d znaků.', 30)
+            ->addRule(Form::MAX_LENGTH, 'Maximální délka názvu je %d znaků.', 30)
             ->setRequired();
         $form->addText('extension', 'Přípona:')
             ->setDisabled();
@@ -171,8 +182,8 @@ class FilesPresenter extends BugsBasePresenter
         	->setRequired();
     	$form->addSelect('group', 'Skupina:', array(
     		NULL => '-',
-    		\Authorizator::ROLE_GUEST => 'host',
-    		\Authorizator::ROLE_REGISTERED => 'registrovaný'
+    		Authorizator::ROLE_GUEST => 'host',
+    		Authorizator::ROLE_REGISTERED => 'registrovaný'
 		));
 
         $form->setDefaults($file);
@@ -192,7 +203,7 @@ class FilesPresenter extends BugsBasePresenter
     public function editFileFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(\Authorizator::FILES_RESOURCE, 'edit'))
+        if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'edit'))
         {
             $this->flashMessage("K úpravě souborů nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -200,7 +211,7 @@ class FilesPresenter extends BugsBasePresenter
 
         try
         {
-            $this->db->table(\Authorizator::FILES_TABLE)->get($values->id)->update($values);
+            $this->db->table(Authorizator::FILES_TABLE)->get($values->id)->update($values);
             $this->flashMessage('Soubor upraven!', 'success');
             $this->redirectHere('manage');
         }
@@ -213,13 +224,13 @@ class FilesPresenter extends BugsBasePresenter
 
     public function actionDelete($id)
     {
-    	if (!$this->user->isAllowed(\Authorizator::FILES_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
+    	if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
     	{
     		$this->flashMessage('Ke smazání tohoto souboru nemáš oprávnění!', 'warning');
     		$this->redirectHere('manage');
     	}
 
-    	$file = $this->db->table(\Authorizator::FILES_TABLE)->get($id);
+    	$file = $this->db->table(Authorizator::FILES_TABLE)->get($id);
     	//@unlink(self::UPLOAD_PATH . '/' . $file->id . '.' . $file->extension); // instead of deleting, just set DELETED_COLUMN => TRUE
     	$file->update(array(self::DELETED_COLUMN => TRUE));
 
@@ -228,21 +239,21 @@ class FilesPresenter extends BugsBasePresenter
 
 	public function actionGet($id)
 	{
-        $file = $this->db->table(\Authorizator::FILES_TABLE)->get($id);
+        $file = $this->db->table(Authorizator::FILES_TABLE)->get($id);
         $allowed = TRUE;
 
-        if ($file->group !== \Authorizator::ROLE_GUEST)
+        if ($file->group !== Authorizator::ROLE_GUEST)
         {
-            if ($file->group !== \Authorizator::ROLE_REGISTERED)
+            if ($file->group !== Authorizator::ROLE_REGISTERED)
             {
-        		if (!$this->user->isAllowed(\Authorizator::FILES_RESOURCE, 'viewTheirOwn', $this->user->id, $file->id))
+        		if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'viewTheirOwn', $this->user->id, $file->id))
         		{
                     $allowed = FALSE;
         		}
             }
             else
             {
-                if (!$this->user->isAllowed(\Authorizator::FILES_RESOURCE, 'view'))
+                if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'view'))
                 {
                     $allowed = FALSE;
                 }

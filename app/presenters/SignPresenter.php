@@ -4,7 +4,8 @@ namespace App\Presenters;
 
 use Nette,
 	App\Model,
-	Nette\Environment;
+	Nette\Environment,
+	Nette\Application\UI\Form;
 
 
 /**
@@ -34,11 +35,11 @@ class SignPresenter extends BugsBasePresenter
 	 */
 	protected function createComponentSignInForm()
 	{
-		$form = new Nette\Application\UI\Form;
+		$form = new Form;
 		// $form->addProtection(); // do NOT dare to uncomment this !!! sign:in won't work !!!
 		
 		$form->addText('username', 'Přihlašovací jméno:')
-			->addRule(Nette\Application\UI\Form::EMAIL)
+			->addRule(Form::EMAIL)
 			->setRequired('Prosím vyplňte uživatelské jméno.');
 
 		$form->addPassword('password', 'Heslo:')

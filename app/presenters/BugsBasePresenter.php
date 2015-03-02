@@ -68,6 +68,11 @@ abstract class BugsBasePresenter extends Nette\Application\UI\Presenter
         }
     }
 
+    protected function redirectHome()
+    {
+        $this->redirect('Homepage:');
+    }
+
     protected function redirectToLogin($presenter = NULL)
     {
         $this->redirect('Sign:in?redirectTo=' . $presenter);

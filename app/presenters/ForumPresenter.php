@@ -3,7 +3,9 @@
 namespace App\Presenters;
 
 use Nette,
-	App\Model;
+	App\Model,
+    \Authorizator,
+    Nette\Application\UI\Form;
 
 
 class ForumPresenter extends BugsBasePresenter
@@ -11,7 +13,7 @@ class ForumPresenter extends BugsBasePresenter
 
 	public function renderDefault()
 	{
-		$posts = $this->db->table(\Authorizator::FORUM_TABLE)->where(array(
+		$posts = $this->db->table(Authorizator::FORUM_TABLE)->where(array(
             'parent' => NULL,
             self::DELETED_COLUMN => FALSE
         ))->order('inserted DESC');
@@ -19,7 +21,7 @@ class ForumPresenter extends BugsBasePresenter
 		$comments = array();
 		foreach ($posts as $post)
 		{
-			$comments[$post->id] = $this->db->table(\Authorizator::FORUM_TABLE)->where(array(
+			$comments[$post->id] = $this->db->table(Authorizator::FORUM_TABLE)->where(array(
                 'parent' => $post->id,
                 self::DELETED_COLUMN => FALSE
             ));
@@ -27,12 +29,12 @@ class ForumPresenter extends BugsBasePresenter
 
 		$this->template->posts = $posts;
 		$this->template->comments = $comments;
-		$this->template->users = $this->db->table(\Authorizator::USERS_TABLE)->fetchAll();
+		$this->template->users = $this->db->table(Authorizator::USERS_TABLE)->fetchAll();
 	}
 
     protected function createComponentAddPostForm()
     {
-        $form = new Nette\Application\UI\Form;
+        $form = new Form;
         $form->addProtection();
         $form->getElementPrototype()->id = 'addPostForm';
 
@@ -52,7 +54,7 @@ class ForumPresenter extends BugsBasePresenter
     {
         $values = $submitButton->getForm()->getValues();
         $values->inserted = NULL; // initializes to CURRENT_TIMESTAMP
-        if (!$this->user->isAllowed(\Authorizator::FORUM_RESOURCE, 'add'))
+        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'add'))
         {
             $this->flashMessage("K přidání příspěvku nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -60,7 +62,7 @@ class ForumPresenter extends BugsBasePresenter
 
         try
         {
-            $this->db->table(\Authorizator::FORUM_TABLE)->insert($values);
+            $this->db->table(Authorizator::FORUM_TABLE)->insert($values);
             $this->flashMessage('Příspěvek přidán!', 'success');
             $this->redirectHere();
         }
@@ -73,11 +75,11 @@ class ForumPresenter extends BugsBasePresenter
 
     protected function createComponentEditPostForm()
     {
-        $form = new Nette\Application\UI\Form;
+        $form = new Form;
         $form->addProtection();
         $form->getElementPrototype()->id = 'editPostForm';
 
-        $post = $this->db->table(\Authorizator::FORUM_TABLE)->get($this->getParam('id'));
+        $post = $this->db->table(Authorizator::FORUM_TABLE)->get($this->getParam('id'));
 
         $form->addHidden('id', ''); // javascript in layout.latte will get it
         $form->addHidden('updatedBy', $this->user->id);
@@ -93,7 +95,7 @@ class ForumPresenter extends BugsBasePresenter
     public function editPostFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(\Authorizator::FORUM_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
+        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
         {
             $this->flashMessage("K úpravě tohoto příspěvku nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -101,7 +103,7 @@ class ForumPresenter extends BugsBasePresenter
 
         try
         {
-            $this->db->table(\Authorizator::FORUM_TABLE)->get($values->id)->update($values);
+            $this->db->table(Authorizator::FORUM_TABLE)->get($values->id)->update($values);
             $this->flashMessage('Příspěvek upraven!', 'success');
             $this->redirectHere();
         }
@@ -114,7 +116,7 @@ class ForumPresenter extends BugsBasePresenter
 
     protected function createComponentAddCommentForm()
     {
-        $form = new Nette\Application\UI\Form;
+        $form = new Form;
         $form->addProtection();
         $form->getElementPrototype()->id = 'addCommentForm';
 
@@ -133,7 +135,7 @@ class ForumPresenter extends BugsBasePresenter
     public function addCommentFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(\Authorizator::FORUM_RESOURCE, 'add'))
+        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'add'))
         {
             $this->flashMessage("K přidání komentáře nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -141,7 +143,7 @@ class ForumPresenter extends BugsBasePresenter
 
         try
         {
-            $this->db->table(\Authorizator::FORUM_TABLE)->insert($values);
+            $this->db->table(Authorizator::FORUM_TABLE)->insert($values);
             $this->flashMessage('Komentář přidán!', 'success');
             $this->redirectHere();
         }
@@ -154,11 +156,11 @@ class ForumPresenter extends BugsBasePresenter
 
     protected function createComponentEditCommentForm()
     {
-        $form = new Nette\Application\UI\Form;
+        $form = new Form;
         $form->addProtection();
         $form->getElementPrototype()->id = 'editCommentForm';
 
-        $post = $this->db->table(\Authorizator::FORUM_TABLE)->get($this->getParam('id'));
+        $post = $this->db->table(Authorizator::FORUM_TABLE)->get($this->getParam('id'));
 
         $form->addHidden('id', ''); // javascript in layout.latte will get it
         $form->addHidden('updatedBy', $this->user->id);
@@ -174,7 +176,7 @@ class ForumPresenter extends BugsBasePresenter
     public function editCommentFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(\Authorizator::FORUM_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
+        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
         {
             $this->flashMessage("K úpravě tohoto komentáře nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -182,7 +184,7 @@ class ForumPresenter extends BugsBasePresenter
 
         try
         {
-            $this->db->table(\Authorizator::FORUM_TABLE)->get($values->id)->update($values);
+            $this->db->table(Authorizator::FORUM_TABLE)->get($values->id)->update($values);
             $this->flashMessage('Komentář upraven!', 'success');
             $this->redirectHere();
         }
@@ -195,7 +197,7 @@ class ForumPresenter extends BugsBasePresenter
 
     public function actionDelete($id)
     {
-        if (!$this->user->isAllowed(\Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
+        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
         {
             $this->flashMessage("Ke smazání tohoto příspěvku nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -203,7 +205,7 @@ class ForumPresenter extends BugsBasePresenter
 
         try
         {
-            $this->db->table(\Authorizator::FORUM_TABLE)->get($id)->update(array(self::DELETED_COLUMN => TRUE));
+            $this->db->table(Authorizator::FORUM_TABLE)->get($id)->update(array(self::DELETED_COLUMN => TRUE));
             $this->flashMessage('Příspěvek byl smazán!', 'success');
         }
         catch (\PDOException $e)

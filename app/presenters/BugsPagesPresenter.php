@@ -3,7 +3,9 @@
 namespace App\Presenters;
 
 use Nette,
-	App\Model;
+	App\Model,
+    \Authorizator,
+    Nette\Application\UI\Form;
 
 /**
  * Pages presenter for pages loaded entirely from database.
@@ -22,13 +24,13 @@ abstract class BugsPagesPresenter extends BugsBasePresenter
 
 	public function renderDefault()
 	{
-        if (!$this->user->isAllowed(\Authorizator::PAGES_RESOURCE, 'view'))
+        if (!$this->user->isAllowed(Authorizator::PAGES_RESOURCE, 'view'))
         {
             $this->flashMessage("K prohlížení této sekce nemáš oprávnění!", 'warning');
             $this->redirectHome();
         }
 
-		$pages = $this->db->table(\Authorizator::PAGES_TABLE)->where(array(
+		$pages = $this->db->table(Authorizator::PAGES_TABLE)->where(array(
 				self::PAGE_PRESENTER_COLUMN => $this->getName(),
 				self::LANG_COLUMN => $this->lang
 			));
@@ -45,7 +47,7 @@ abstract class BugsPagesPresenter extends BugsBasePresenter
 
 	protected function createComponentEditPageForm()
 	{
-		$form = new Nette\Application\UI\Form;
+		$form = new Form;
         $form->addProtection();
 		$form->getElementPrototype()->id = 'editPageForm';
 
@@ -67,7 +69,7 @@ abstract class BugsPagesPresenter extends BugsBasePresenter
             ->onClick[] = callback($this, 'editPageFormSubmittedRestore');
 
 		$datesArray = array();
-        foreach ($this->db->table(\Authorizator::PAGES_TABLE)->where(array(
+        foreach ($this->db->table(Authorizator::PAGES_TABLE)->where(array(
 				self::PAGE_PRESENTER_COLUMN => $this->getName(),
 				self::LANG_COLUMN => $this->lang
 			))->order('date DESC') as $row)
@@ -81,17 +83,17 @@ abstract class BugsPagesPresenter extends BugsBasePresenter
 
 	public function editPageFormSubmittedSave($submitButton)
 	{
-        if (!$this->user->isAllowed(\Authorizator::PAGES_RESOURCE, 'edit'))
+        if (!$this->user->isAllowed(Authorizator::PAGES_RESOURCE, 'edit'))
         {
             $this->flashMessage("K úpravě stránek nemáš oprávnění!", 'warning');
-            $this->redirectHome();
+            $this->redirectHere();
         }
 
         $values = $submitButton->getForm()->getValues();
         unset($values['date']);
         try
         {
-            $this->db->table(\Authorizator::PAGES_TABLE)->insert($values);
+            $this->db->table(Authorizator::PAGES_TABLE)->insert($values);
             $this->flashMessage('Změny byly uloženy.', 'success');
         }
         catch(\PDOException $e)
@@ -103,20 +105,20 @@ abstract class BugsPagesPresenter extends BugsBasePresenter
 
 	public function editPageFormSubmittedRestore($submitButton)
 	{
-        if (!$this->user->isAllowed(\Authorizator::PAGES_RESOURCE, 'edit'))
+        if (!$this->user->isAllowed(Authorizator::PAGES_RESOURCE, 'edit'))
         {
             $this->flashMessage("K úpravě stránek nemáš oprávnění!", 'warning');
-            $this->redirectHome();
+            $this->redirectHere();
         }
 
         $id = $submitButton->getForm()->getValues()->date;
-        $record = $this->db->table(\Authorizator::PAGES_TABLE)->get($id)->toArray();
+        $record = $this->db->table(Authorizator::PAGES_TABLE)->get($id)->toArray();
         $date = $record['date'];
         unset($record['id']);
         unset($record['date']);
         try
         {
-            $this->db->table(\Authorizator::PAGES_TABLE)->insert($record);
+            $this->db->table(Authorizator::PAGES_TABLE)->insert($record);
             $this->flashMessage('Vrácena verze z ' . $date . '.', 'success');
         }
         catch(\PDOException $e)

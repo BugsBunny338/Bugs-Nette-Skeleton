@@ -3,20 +3,21 @@
 namespace App\Presenters;
 
 use Nette,
-	App\Model;
+	App\Model,
+	Nette\Application\UI\Form;
 
 
 class HomepagePresenter extends BugsBasePresenter
 {
 	protected function createComponentContactForm()
 	{
-		$form = new Nette\Application\UI\Form;
+		$form = new Form;
 
 		$form->addText('name')
 		  ->setRequired();
 		$form->addText('email')
 		  ->setRequired()
-		  ->addRule(Nette\Application\UI\Form::EMAIL);
+		  ->addRule(Form::EMAIL);
 		$form->addTextArea('message')
 		  ->setRequired();
 
@@ -26,7 +27,7 @@ class HomepagePresenter extends BugsBasePresenter
 		return $form;
 	}
 
-	public function contactFormSubmitted(Nette\Application\UI\Form $form)
+	public function contactFormSubmitted(Form $form)
 	{
 		$values = $form->getValues();
 

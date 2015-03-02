@@ -14,7 +14,7 @@ abstract class BugsLanguagesPresenter extends BugsBasePresenter
     protected function beforeRender() {
         parent::beforeRender();
 
-        // formatRenderMethod edited in Presenter.php !!!
+        // formatRenderMethod edited in Presenter.php !!! - 2.3.2015 probably not need any more ???
         $this->setView($this->lang . "/" . $this->getView());
     }
 
