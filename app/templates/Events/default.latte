@@ -17,10 +17,10 @@
           	<p>{!$event->text}</p>
           </div>
 
-          {if $user->isAllowed(\Authorizator::EVENTS_RESOURCE, 'editTheirOwn', $user->id, $event->id)}
+          {if $acl->isAllowed($user->roles, Authorizator::EVENTS_RESOURCE, 'editTheirOwn', $user->id, $event->id)}
             <a n:href="Events:edit $event->id" class="small secondary button no-margin">Upravit</a>
           {/if}
-          {if $user->isAllowed(\Authorizator::EVENTS_RESOURCE, 'deleteTheirOwn', $user->id, $event->id)}
+          {if $acl->isAllowed($user->roles, Authorizator::EVENTS_RESOURCE, 'deleteTheirOwn', $user->id, $event->id)}
             <a n:href="Events:delete $event->id" class="small alert button no-margin confirm">Smazat</a>
           {/if}
 
@@ -34,7 +34,7 @@
 
       <hr>
 
-      {if $user->isAllowed(\Authorizator::EVENTS_RESOURCE, 'add')}
+      {if $acl->isAllowed($user->roles, Authorizator::EVENTS_RESOURCE, 'add')}
         <a n:href="Events:add" class="small button no-margin">Přidat novou událost</a>
       {/if}
 

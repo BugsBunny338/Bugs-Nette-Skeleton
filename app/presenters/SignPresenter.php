@@ -88,7 +88,7 @@ class SignPresenter extends BugsBasePresenter
 
 	public function renderOut($redirectTo = 'Homepage')
 	{
-		$this->getUser()->logout();
+		$this->user->logout(TRUE); // parameter TRUE ensures deleting user identity
 		$this->flashMessage('Byl(a) jste odhlášen(a).');
 		$this->redirect($redirectTo . ':');
 	}

@@ -82,7 +82,7 @@
                         <!-- Right Nav Section -->
                         <ul class="right">
                             {if $user->isLoggedIn()}
-                                {if $user->isAllowed(\Authorizator::USERS_RESOURCE, 'manage')}
+                                {if $acl->isAllowed($user->roles, Authorizator::USERS_RESOURCE, 'manage')}
                                     <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:">Uživatelé</a></li>
                                 {else}
                                     <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:edit $user->id">Nastavení</a></li>
@@ -105,7 +105,7 @@
                             <li{ifCurrent Homepage:* } class="active"{/ifCurrent}><a n:href="Homepage:">Domů</a></li>
                             <li{ifCurrent Editable:* } class="active"{/ifCurrent}><a n:href="Editable:">Upravitelná</a></li>
                             <li{ifCurrent Events:* } class="active"{/ifCurrent}><a n:href="Events:">Události</a></li>
-                            <li class="{if $user->isAllowed(\Authorizator::FILES_RESOURCE, 'manage')}has-dropdown{/if}{ifCurrent Files:* } active{/ifCurrent}">
+                            <li class="{if $acl->isAllowed($user->roles, Authorizator::FILES_RESOURCE, 'manage')}has-dropdown{/if}{ifCurrent Files:* } active{/ifCurrent}">
                                 <a n:href="Files:">Soubory</a>
                                 <ul class="dropdown">
                                     <li{ifCurrent Files:manage } class="active"{/ifCurrent}><a n:href="Files:manage">Spravovat soubory</a></li>

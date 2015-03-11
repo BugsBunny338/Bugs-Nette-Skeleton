@@ -54,7 +54,7 @@ class ForumPresenter extends BugsBasePresenter
     {
         $values = $submitButton->getForm()->getValues();
         $values->inserted = NULL; // initializes to CURRENT_TIMESTAMP
-        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'add'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FORUM_RESOURCE, 'add'))
         {
             $this->flashMessage("K přidání příspěvku nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -95,7 +95,7 @@ class ForumPresenter extends BugsBasePresenter
     public function editPostFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FORUM_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
         {
             $this->flashMessage("K úpravě tohoto příspěvku nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -135,7 +135,7 @@ class ForumPresenter extends BugsBasePresenter
     public function addCommentFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'add'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FORUM_RESOURCE, 'add'))
         {
             $this->flashMessage("K přidání komentáře nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -176,7 +176,7 @@ class ForumPresenter extends BugsBasePresenter
     public function editCommentFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FORUM_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
         {
             $this->flashMessage("K úpravě tohoto komentáře nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -197,7 +197,7 @@ class ForumPresenter extends BugsBasePresenter
 
     public function actionDelete($id)
     {
-        if (!$this->user->isAllowed(Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
         {
             $this->flashMessage("Ke smazání tohoto příspěvku nemáš oprávnění!", 'warning');
             $this->redirectHere();

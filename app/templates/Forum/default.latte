@@ -21,7 +21,7 @@
 
 		{var $postPrefix = 'post-'}
 		{var $commentPrefix = 'comment-'}
-		{var $allowedToAddPostOrComment = (int) $user->isAllowed(\Authorizator::FORUM_RESOURCE, 'add')}
+		{var $allowedToAddPostOrComment = (int) $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'add')}
 
 		{if $allowedToAddPostOrComment}
 			<table class="newPost">
@@ -79,7 +79,7 @@
 						</td>
 						<td class="text">{!$post->text}</td>
 						<td style="width: 1%" class="control">
-							{if $user->isAllowed(\Authorizator::FORUM_RESOURCE, 'editTheirOwn', $user->id, $post->id)}
+							{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'editTheirOwn', $user->id, $post->id)}
 								<a href="#" class="small secondary button no-margin" onclick="
 									var td = $(this).parents('tr').find('td.text'),
 										text = td.html();
@@ -101,7 +101,7 @@
 									tinymce.activeEditor.selection.collapse(false);
 								">upravit</a>
 								<a href="#" class="small success button no-margin hidden save" onclick="editPostFormSubmit.call(this)">uložit</a>
-								{if $user->isAllowed(\Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $user->id, $post->id)}
+								{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $user->id, $post->id)}
 									<a style="margin-top: 8px" n:href="Forum:delete $post->id" class="small alert button confirm no-margin delete hidden">smazat</a>
 								{/if}
 								<hr class="cancel hidden">
@@ -115,7 +115,7 @@
 							<tr class="smallerFont" id="{$commentPrefix}{$comment->id}">
 								<td><a href="mailto:{$users[$comment->insertedBy]->username}">{$users[$comment->insertedBy]->name} {$users[$comment->insertedBy]->surname}</a>: <div class="comment">{$comment->text}</div></td>
 								<td class="centerAlign fixedWidth2 control">
-									{if $user->isAllowed(\Authorizator::FORUM_RESOURCE, 'editTheirOwn', $user->id, $comment->id)}
+									{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'editTheirOwn', $user->id, $comment->id)}
 										<a href="#" class="tiny secondary button no-margin" onclick="
 											var div = $(this).parents('tr').find('.comment'),
 												text = div.html();
@@ -134,7 +134,7 @@
 											$('p.newPost').hide();
 										">upravit</a>
 										<a href="#" class="tiny success button no-margin hidden save" onclick="editCommentFormSubmit.call(this)">uložit</a>
-										{if $user->isAllowed(\Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $user->id, $comment->id)}
+										{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $user->id, $comment->id)}
 											<a style="margin-top: 8px" n:href="Forum:delete $comment->id" class="no-margin tiny button alert delete hidden confirm">smazat</a>
 										{/if}
 										<hr class="cancel hidden">

@@ -79,53 +79,78 @@ class Authorizator extends Nette\Object implements NS\IAuthorizator
             'deleteTheirOwn'
         ));
         /* ***** EDIT HERE - END */
-        
+
         $this->acl = $acl;
         $this->db = $context->database->context;
     }
 
-    public function isAllowed($role, $resource, $privilege, $userId = NULL, $resourceId = NULL)
+    public function isAllowed($roles, $resource, $privilege, $userId = NULL, $resourceId = NULL)
     {
         // dump($userId);
         // dump($resourceId);
 
-        if ($role == self::ROLE_REGISTERED)
+        if (!is_array($roles))
         {
-            switch ($privilege)
-            {
-                case 'viewTheirOwn':
-                    $privilege = 'view';
-                    break;
-                case 'editTheirOwn':
-                    $privilege = 'edit';
-                    break;
-                case 'deleteTheirOwn':
-                    $privilege = 'delete';
-                    break;
-                default:
-                    return $this->acl->isAllowed($role, $resource, $privilege);
-            }
+            $roles = [$roles];
+        }
 
-            return
-                $this->acl->isAllowed($role, $resource, $privilege) &&
-                $this->isOwner($userId, $this->resourceToTable[$resource], $resourceId);
-        }
-        else
+        // admin usually has ***TheirOwn permissions
+        foreach ($roles as $role)
         {
-            // dump($role);
-            // dump($privilege);
-            return $this->acl->isAllowed($role, $resource, $privilege);
+            if ($this->acl->isAllowed($role, $resource, $privilege))
+            {
+                return TRUE;
+            }
         }
+
+        // ok, not an admin or no ***TheirOwn permissions for admin
+        $ownOnly = FALSE;
+
+        switch ($privilege)
+        {
+            case 'viewTheirOwn':
+                $privilege = 'view';
+                $ownOnly = TRUE;
+                break;
+            case 'editTheirOwn':
+                $privilege = 'edit';
+                $ownOnly = TRUE;
+                break;
+            case 'deleteTheirOwn':
+                $privilege = 'delete';
+                $ownOnly = TRUE;
+                break;
+        }
+
+        // dump($roles, $resource, $privilege, $userId, $resourceId); exit;
+        // dump($ownOnly); exit;
+
+        foreach ($roles as $role)
+        {
+            if ($this->acl->isAllowed($role, $resource, $privilege))
+            {
+                if ($ownOnly)
+                {
+                    // dump($this->isOwner($userId, $this->resourceToTable[$resource], $resourceId)); exit;
+                    return $this->isOwner($userId, $this->resourceToTable[$resource], $resourceId);
+                }
+                else
+                {
+                    return TRUE;
+                }
+            }
+        }
+
+        return FALSE;
     }
     
     private function isOwner($userId, $table, $resourceId)
     {
-        // dump($userId);
-        // dump($resourceId);
+        // dump($userId, $resourceId); exit;
 
         if ($userId == NULL || $resourceId == NULL)
         {
-            return false;
+            return FALSE;
         }
         else
         {
@@ -149,7 +174,7 @@ class Authorizator extends Nette\Object implements NS\IAuthorizator
             }
             
             // dump($table);
-            // dump($this->db->table('events'));
+            // dump($this->db->table($table));
 
             return $this->db->table($table)->get($resourceId)->$column == $userId;
         }

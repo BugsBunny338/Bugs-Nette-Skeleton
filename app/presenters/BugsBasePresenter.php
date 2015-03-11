@@ -18,7 +18,9 @@ abstract class BugsBasePresenter extends Nette\Application\UI\Presenter
 
     /** @persistent */
     public $lang;
+
     protected $db;
+    protected $acl;
 
     /* ***** EDIT HERE - BEGIN */
     private $languages = array('cs', 'en');
@@ -30,6 +32,7 @@ abstract class BugsBasePresenter extends Nette\Application\UI\Presenter
     {
         parent::__construct($context);
         $this->db = $context->database->context;
+        $this->acl = $context->authorizator;
     }
 
 	/* translator */
@@ -51,7 +54,8 @@ abstract class BugsBasePresenter extends Nette\Application\UI\Presenter
         $this->template->dateFormat = $this->dateFormat[$this->lang];
         $this->template->lang = $this->lang;
         $this->template->langs = $this->languages;
-        $this->template->presenter = $this->getName();
+        $this->template->presenter = $this->getName(); // used in layout.latte for Sign:out?redirectTo=$presenter
+        $this->template->acl = $this->acl;
 
         $this->template->setTranslator($this->context->translator->setLang($this->lang));
     }

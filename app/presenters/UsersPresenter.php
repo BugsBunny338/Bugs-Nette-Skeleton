@@ -17,7 +17,7 @@ class UsersPresenter extends BugsBasePresenter
     
     public function renderDefault()
     {
-        if (!$this->user->isAllowed(Authorizator::USERS_RESOURCE, 'manage'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'manage'))
         {
             $this->flashMessage("Ke správě uživatelů nemáte oprávnění!", 'warning');
             $this->redirectToLogin($this->getName());
@@ -54,7 +54,7 @@ class UsersPresenter extends BugsBasePresenter
     public function addUserFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::USERS_RESOURCE, 'manage'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'manage'))
         {
             $this->flashMessage("K přidání uživatelů nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -90,7 +90,7 @@ class UsersPresenter extends BugsBasePresenter
 
     public function renderEdit($id)
     {
-        if (!$this->user->isAllowed(Authorizator::USERS_RESOURCE, 'editTheirOwn', $this->user->id, $id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'editTheirOwn', $this->user->id, $id))
         {
             $this->flashMessage("Ke správě ostatních uživatelů nemáte oprávnění!", 'warning');
             $this->redirectHere('edit', $this->user->id);
@@ -115,7 +115,7 @@ class UsersPresenter extends BugsBasePresenter
             ->addRule(Form::EMAIL)
             ->setRequired();
 
-        if ($this->user->isAllowed(Authorizator::USERS_RESOURCE, 'manage') && $editedUserId != $this->user->id)
+        if ($this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'manage') && $editedUserId != $this->user->id)
         {
             $form->addSelect('role', 'Role:', array(
                 Authorizator::ROLE_ADMIN => 'administrátor',
@@ -141,7 +141,7 @@ class UsersPresenter extends BugsBasePresenter
     public function editUserFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::USERS_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
         {
             $this->flashMessage("K úpravě tohoto uživatele nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -195,7 +195,7 @@ class UsersPresenter extends BugsBasePresenter
     public function changePasswordFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::USERS_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
         {
             $this->flashMessage("K úpravě hesla tohoto uživatele nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -218,7 +218,7 @@ class UsersPresenter extends BugsBasePresenter
 
     public function actionGenerateNewPassword($id)
     {
-        if (!$this->user->isAllowed(Authorizator::USERS_RESOURCE, 'editTheirOwn', $this->user->id, $id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'editTheirOwn', $this->user->id, $id))
         {
             $this->flashMessage("Ke změně hesla jiného uživatele nemáte oprávnění!", 'warning');
             $this->redirectHere();
@@ -233,7 +233,7 @@ class UsersPresenter extends BugsBasePresenter
 
     public function actionDelete($id)
     {
-        if (!$this->user->isAllowed(Authorizator::USERS_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
         {
             $this->flashMessage("K smazání tohoto uživatele nemáš oprávnění!", 'warning');
             $this->redirectHere();

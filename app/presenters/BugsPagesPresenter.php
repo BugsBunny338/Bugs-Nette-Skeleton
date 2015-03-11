@@ -24,7 +24,7 @@ abstract class BugsPagesPresenter extends BugsBasePresenter
 
 	public function renderDefault()
 	{
-        if (!$this->user->isAllowed(Authorizator::PAGES_RESOURCE, 'view'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::PAGES_RESOURCE, 'view'))
         {
             $this->flashMessage("K prohlížení této sekce nemáš oprávnění!", 'warning');
             $this->redirectHome();
@@ -83,7 +83,7 @@ abstract class BugsPagesPresenter extends BugsBasePresenter
 
 	public function editPageFormSubmittedSave($submitButton)
 	{
-        if (!$this->user->isAllowed(Authorizator::PAGES_RESOURCE, 'edit'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::PAGES_RESOURCE, 'edit'))
         {
             $this->flashMessage("K úpravě stránek nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -105,7 +105,7 @@ abstract class BugsPagesPresenter extends BugsBasePresenter
 
 	public function editPageFormSubmittedRestore($submitButton)
 	{
-        if (!$this->user->isAllowed(Authorizator::PAGES_RESOURCE, 'edit'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::PAGES_RESOURCE, 'edit'))
         {
             $this->flashMessage("K úpravě stránek nemáš oprávnění!", 'warning');
             $this->redirectHere();

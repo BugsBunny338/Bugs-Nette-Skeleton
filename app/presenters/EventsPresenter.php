@@ -15,7 +15,7 @@ class EventsPresenter extends BugsBasePresenter
 {
 	public function renderDefault()
 	{
-        if (!$this->user->isAllowed(Authorizator::EVENTS_RESOURCE, 'view'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::EVENTS_RESOURCE, 'view'))
         {
             $this->flashMessage('K prohlížení událostí nemáte oprávnění!', 'warning');
             $this->redirectToLogin($this->getName());
@@ -62,7 +62,7 @@ class EventsPresenter extends BugsBasePresenter
     public function addEventFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::EVENTS_RESOURCE, 'add'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::EVENTS_RESOURCE, 'add'))
         {
             $this->flashMessage("K přidání události nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -83,7 +83,7 @@ class EventsPresenter extends BugsBasePresenter
 
     public function renderEdit($id)
     {
-        if (!$this->user->isAllowed(Authorizator::EVENTS_RESOURCE, 'editTheirOwn', $this->user->id, $id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::EVENTS_RESOURCE, 'editTheirOwn', $this->user->id, $id))
         {
             $this->flashMessage("K úpravě této události nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -132,7 +132,7 @@ class EventsPresenter extends BugsBasePresenter
     public function editEventFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::EVENTS_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::EVENTS_RESOURCE, 'editTheirOwn', $this->user->id, $values->id))
         {
             $this->flashMessage("K úpravě událostí nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -152,7 +152,7 @@ class EventsPresenter extends BugsBasePresenter
 
     public function actionDelete($id)
     {
-        if (!$this->user->isAllowed(Authorizator::EVENTS_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::EVENTS_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
         {
             $this->flashMessage("Ke smazání této události nemáš oprávnění!", 'warning');
             $this->redirectHere();

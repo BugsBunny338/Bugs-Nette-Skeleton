@@ -14,7 +14,8 @@ class FilesPresenter extends BugsBasePresenter
 
 	public function renderDefault()
 	{
-        if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'view'))
+
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'view'))
         {
             $this->flashMessage("K prohlížení této sekce nemáš oprávnění!", 'warning');
             $this->redirectHome();
@@ -48,7 +49,7 @@ class FilesPresenter extends BugsBasePresenter
 
 	public function renderManage()
 	{
-		if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'manage'))
+		if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'manage'))
 		{
 			$this->flashMessage('Ke správě souborů nemáš oprávnění!', 'warning');
 			$this->redirectHere();
@@ -60,7 +61,7 @@ class FilesPresenter extends BugsBasePresenter
 
     public function renderUpload()
     {
-        if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'manage'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'manage'))
         {
             $this->flashMessage('K nahrávání souborů nemáš oprávnění!', 'warning');
             $this->redirectHere();
@@ -112,7 +113,7 @@ class FilesPresenter extends BugsBasePresenter
     public function uploadFileFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'manage'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'manage'))
         {
             $this->flashMessage("Ke správě souborů nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -126,7 +127,7 @@ class FilesPresenter extends BugsBasePresenter
         {
 	        try
 	        {
-	        	// upload and add extension to $values
+	        	// upload and add file extension to $values
 	            $row = $this->db->table(Authorizator::FILES_TABLE)->insert($values);
 	        	$file->move(self::UPLOAD_PATH . '/' . $row->id . '.' . $values->extension);
 	            $this->flashMessage('Soubor nahrán!', 'success');
@@ -147,7 +148,7 @@ class FilesPresenter extends BugsBasePresenter
 
 	public function renderEdit($id)
 	{
-		if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'editTheirOwn', $this->user->id, $id))
+		if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'editTheirOwn', $this->user->id, $id))
 		{
 			$this->flashMessage('K editaci tohoto souboru nemáte oprávnění!', 'warning');
 			$this->redirectHere('manage');
@@ -163,7 +164,7 @@ class FilesPresenter extends BugsBasePresenter
 
         $id = $this->getParam('id');
         $file = $this->db->table(Authorizator::FILES_TABLE)->get($id);
-        $users = $this->db->table(Authorizator::USERS_TABLE)->fetchAll();
+        $users = $this->db->table(Authorizator::USERS_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
         $owners = array();
 
         foreach ($users as $user)
@@ -203,7 +204,7 @@ class FilesPresenter extends BugsBasePresenter
     public function editFileFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
-        if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'edit'))
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'edit'))
         {
             $this->flashMessage("K úpravě souborů nemáš oprávnění!", 'warning');
             $this->redirectHere();
@@ -224,7 +225,7 @@ class FilesPresenter extends BugsBasePresenter
 
     public function actionDelete($id)
     {
-    	if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
+    	if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'deleteTheirOwn', $this->user->id, $id))
     	{
     		$this->flashMessage('Ke smazání tohoto souboru nemáš oprávnění!', 'warning');
     		$this->redirectHere('manage');
@@ -242,18 +243,21 @@ class FilesPresenter extends BugsBasePresenter
         $file = $this->db->table(Authorizator::FILES_TABLE)->get($id);
         $allowed = TRUE;
 
+        // dump($this->user->authorizator); exit;
+        // dump($this->user->roles); exit;
+
         if ($file->group !== Authorizator::ROLE_GUEST)
         {
             if ($file->group !== Authorizator::ROLE_REGISTERED)
             {
-        		if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'viewTheirOwn', $this->user->id, $file->id))
+        		if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'viewTheirOwn', $this->user->id, $file->id))
         		{
                     $allowed = FALSE;
         		}
             }
             else
             {
-                if (!$this->user->isAllowed(Authorizator::FILES_RESOURCE, 'view'))
+                if (!$this->acl->isAllowed($this->user->roles, Authorizator::FILES_RESOURCE, 'view'))
                 {
                     $allowed = FALSE;
                 }
@@ -265,8 +269,15 @@ class FilesPresenter extends BugsBasePresenter
             $this->flashMessage('Ke čtení tohoto souboru nemáte oprávnění!', 'warning');
             $this->redirectHere();
         }
-
-		$this->sendResponse(new Nette\Application\Responses\FileResponse(self::UPLOAD_PATH . '/' . $file->id . '.' . $file->extension, $file->name . '.' . $file->extension));
+        else
+        {
+            $this->sendResponse(
+                new Nette\Application\Responses\FileResponse(
+                    self::UPLOAD_PATH . '/' . $file->id . '.' . $file->extension,
+                    $file->name . '.' . $file->extension
+                )
+            );
+        }
 	}
 
 	private function sortFilesByName($a, $b)
