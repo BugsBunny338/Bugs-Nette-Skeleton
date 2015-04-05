@@ -123,7 +123,7 @@ class FilesPresenter extends BugsBasePresenter
         unset($values['file']);
         $values['extension'] = pathinfo($file->name, PATHINFO_EXTENSION);
 
-        if ($file->error == 0)
+        if ($file->error == UPLOAD_ERR_OK)
         {
 	        try
 	        {
@@ -172,7 +172,8 @@ class FilesPresenter extends BugsBasePresenter
         	$owners[$user->id] = $user->surname . ', ' . $user->name . ' (' . $user->username . ')';
         }
 
-        $form->addHidden('id', $id);
+        $form->addHidden('id', $file->id);
+
         $form->addText('name', 'Název:')
             ->addRule(Form::MAX_LENGTH, 'Maximální délka názvu je %d znaků.', 30)
             ->setRequired();
@@ -196,7 +197,8 @@ class FilesPresenter extends BugsBasePresenter
         $form->addSubmit('cancel', 'Zrušit')
             ->setAttribute('class', 'alert small')
             ->setValidationScope(FALSE)
-            ->onClick[] = function() use ($presenter) { $presenter->redirectHere('manage'); };
+            // ->onClick[] = function() use ($presenter) { $presenter->redirectHere('manage'); };
+            ->onClick[] = callback($this, 'cancel');
 
         return $form;
     }

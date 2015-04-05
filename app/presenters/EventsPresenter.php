@@ -33,6 +33,7 @@ class EventsPresenter extends BugsBasePresenter
         $form->addProtection();
 
         $form->addHidden(self::LANG_COLUMN, $this->lang);
+        $form->addHidden('inserted', NULL);
         $form->addHidden('insertedBy', $this->user->id);
         $form->addHidden('updatedBy', $this->user->id);
 
@@ -62,6 +63,8 @@ class EventsPresenter extends BugsBasePresenter
     public function addEventFormSubmitted($submitButton)
     {
         $values = $submitButton->getForm()->getValues();
+        $values->inserted = NULL; // initializes to CURRENT_TIMESTAMP
+        
         if (!$this->acl->isAllowed($this->user->roles, Authorizator::EVENTS_RESOURCE, 'add'))
         {
             $this->flashMessage("K přidání události nemáš oprávnění!", 'warning');

@@ -7,6 +7,14 @@
 
         {if count($files)}
 
+            {if count($files) > 10}
+
+                <hr>
+
+                <p class="centerAlign no-margin"><a n:href="Files:upload" class="button small">Nahrát soubor</a></p>
+
+            {/if}
+
             <table>
             	<tr>
     	        	<th>Název</th>
@@ -15,6 +23,7 @@
     	        	<th>Nahráno&nbsp;kým</th>
     	        	<th>Vlastník</th>
     	        	<th>Skupina</th>
+                    <th></th>
     	        	<th></th>
             	</tr>
             	{foreach $files as $file}
@@ -37,11 +46,11 @@
 
             <hr>
 
-            <p class="centerAlign no-margin"><a n:href="Files:upload" class="button small">Nahrát soubor</a></p>
-
-            <p>V databázi nejsou nahrány žádné soubory.</p>
+            <p class="centerAlign">V databázi nejsou nahrány žádné soubory.</p>
 
         {/if}
+
+        <p class="centerAlign no-margin"><a n:href="Files:upload" class="button small">Nahrát soubor</a></p>
 
     </div>
   </div>

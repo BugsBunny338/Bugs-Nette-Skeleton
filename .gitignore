@@ -2,3 +2,6 @@
 /log
 /bower_components
 /vendor
+/upload/photos
+/upload/news
+/upload/files

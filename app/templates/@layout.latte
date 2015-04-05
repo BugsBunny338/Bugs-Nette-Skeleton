@@ -15,6 +15,7 @@
         <title>Bugs Nette Skeleton</title>
 
         {* <link rel="shortcut icon" href="{$basePath}/favicon.ico"> *}
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/normalize.css" />
 
         {* top-bar breakpoint set to large; created by SASS *}
         {*
@@ -105,6 +106,12 @@
                             <li{ifCurrent Homepage:* } class="active"{/ifCurrent}><a n:href="Homepage:">Domů</a></li>
                             <li{ifCurrent Editable:* } class="active"{/ifCurrent}><a n:href="Editable:">Upravitelná</a></li>
                             <li{ifCurrent Events:* } class="active"{/ifCurrent}><a n:href="Events:">Události</a></li>
+                            <li class="{if $acl->isAllowed($user->roles, Authorizator::NEWS_RESOURCE, 'add')}has-dropdown{/if}{ifCurrent News:* } active{/ifCurrent}">
+                                <a n:href="News:">Novinky</a>
+                                <ul class="dropdown">
+                                    <li{ifCurrent News:add } class="active"{/ifCurrent}><a n:href="News:add">Přidat novinku</a></li>
+                                </ul>
+                            </li>
                             <li class="{if $acl->isAllowed($user->roles, Authorizator::FILES_RESOURCE, 'manage')}has-dropdown{/if}{ifCurrent Files:* } active{/ifCurrent}">
                                 <a n:href="Files:">Soubory</a>
                                 <ul class="dropdown">
@@ -113,6 +120,13 @@
                                 </ul>
                             </li>
                             <li{ifCurrent Forum:* } class="active"{/ifCurrent}><a n:href="Forum:">Fórum</a></li>
+                            <li class="{if $acl->isAllowed($user->roles, Authorizator::PHOTOS_RESOURCE, 'manage')}has-dropdown{/if}{ifCurrent Photogallery:* } active{/ifCurrent}">
+                                <a n:href="Photogallery:">Fotogalerie</a>
+                                <ul class="dropdown">
+                                    <li{ifCurrent Photogallery:manageAlbums } class="active"{/ifCurrent}><a n:href="Photogallery:manageAlbums">Spravovat alba</a></li>
+                                    <li{ifCurrent Photogallery:addAlbum } class="active"{/ifCurrent}><a n:href="Photogallery:addAlbum">Přidat album</a></li>
+                                </ul>
+                            </li>
                             <li{ifCurrent Langs:* } class="active"{/ifCurrent}><a n:href="Langs:">Jazyky</a></li>
                         </ul>
                     </section>

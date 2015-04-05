@@ -1,0 +1,11 @@
+{block content}
+
+<div class="row news">
+    <div class="large-12 columns">
+
+        <h2>Úprava novinky {$new->title} ze dne {$new->updated->format('j. n. Y')} <img src="{$basePath}/{$uploadPath}/{$new->photo}"></h2>
+
+        {control editNewForm}
+      
+    </div>
+  </div>

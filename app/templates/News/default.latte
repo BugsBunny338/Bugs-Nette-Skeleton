@@ -1,0 +1,50 @@
+{block content}
+
+  <div class="row news">
+    <div class="large-12 columns">
+
+      <h1>Novinky</h1>
+
+      {if count($news)}
+
+        {foreach $news as $new}
+
+          <hr>
+
+          <div class="new">
+          	<time datetime="{$new->updated->format('Y-m-d')}">{$new->updated->format('j. n. Y')}</time>
+          	<h2>{$new->title}</h2>
+          	<p>
+          		{if $new->photo}<img src="{$basePath}/{$uploadPath}/{$new->photo}">{/if}
+          		{!$new->text}
+          	</p>
+          </div>
+
+          {if $acl->isAllowed($user->roles, Authorizator::NEWS_RESOURCE, 'editTheirOwn', $user->id, $new->id)}
+            <a n:href="News:edit $new->id" class="small secondary button no-margin">Upravit</a>
+          {/if}
+          {if $acl->isAllowed($user->roles, Authorizator::NEWS_RESOURCE, 'deleteTheirOwn', $user->id, $new->id)}
+            <a n:href="News:delete $new->id" class="small alert button no-margin confirm">Smazat</a>
+          {/if}
+
+        {/foreach}
+
+      {else}
+
+        <p>V databázi nejsou žádné novinky.</p>
+
+      {/if}
+
+      <hr>
+
+      {if $acl->isAllowed($user->roles, Authorizator::NEWS_RESOURCE, 'add')}
+        <a n:href="News:add" class="small button no-margin">Přidat novinku</a>
+      {/if}
+
+      <br>
+      <br>
+
+    </div>
+  </div>
+
+{/block}

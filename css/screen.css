@@ -24,6 +24,12 @@ table {
 	width: 100%;
 }
 
+tr:not(:last-child) th:empty,
+td.thin,
+th.thin {
+	width: 1%;
+}
+
 textarea {
 	resize: none;
 }
@@ -91,8 +97,19 @@ input.smallerFont {
 
 /*****************************************************************************/
 
-.events time {
+.events time,
+.news time {
 	float: right;
+}
+
+.news img {
+	width: 150px;
+	float: right;
+	margin: 0 0 10px 10px;
+}
+
+.news h2 img {
+	height: 50px;
 }
 
 /*****************************************************************************/
@@ -137,6 +154,47 @@ input.smallerFont {
 
 .forum div.comment {
 	display: inline;
+}
+
+/*****************************************************************************/
+
+.photogallery .album {
+	border: 1px solid red;
+	width: 200px;
+	height: 250px;
+	padding: 10px;
+	margin: auto;
+	margin-bottom: 50px;
+	clear: both;
+}
+
+.photogallery .album .cover {
+	border: 1px solid blue;
+	height: 150px;
+	clear: both;
+}
+
+.photogallery p {
+	text-align: center;
+	margin-top: 10px;
+	line-height: 100%;
+}
+
+.photogallery .name + br {
+	line-height: 25px;
+}
+
+.photogallery .created,
+.photogallery .updated {
+	font-size: 10px;
+}
+
+.thumbnail {
+	min-height: 50px;
+	min-width: 100px;
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
 }
 
 /*****************************************************************************/

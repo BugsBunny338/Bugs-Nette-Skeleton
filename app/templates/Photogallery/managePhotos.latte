@@ -1,0 +1,59 @@
+{block content}
+
+<div class="row">
+    <div class="large-12 columns">
+
+        <h2>Správa fotografií v albu '{$album->title}'</a></h2>
+
+        {if count($photos)}
+
+        	{if count($photos) > 10}
+
+	        	<hr>
+
+				<p class="centerAlign no-margin"><a n:href="Photogallery:uploadPhotos $album->id" class="button small">Přidat fotografie</a></p>
+
+			{/if}
+
+            <table>
+            	<tr>
+    	        	<th>Titulek</th>
+    	        	<th>Náhled</th>
+    	        	<th>Nahráno</th>
+    	        	<th>Nahrál(a)</th>
+    	        	<th></th>
+                    <th></th>
+                    <th></th>
+            	</tr>
+            	{foreach $photos as $photo}
+            		{var $addedBy = $users[$photo->uploadedBy]}
+            		<tr>
+            			<td>{$photo->title}</td>
+            			<td><div class="thumbnail" style="background-image: url({$basePath}/upload/photos/{$photo->id}.{$photo->extension})">&nbsp;</div></td>
+            			<td>{$photo->uploaded}</td>
+            			<td>{$addedBy->surname},&nbsp;{$addedBy->name}<br>({$addedBy->username})</td>
+            			<td>
+            				{if $photo->id != $album->photo}
+            					<a n:href="Photogallery:setCoverPhoto $photo->id" class="small button no-margin">nastavit&nbsp;jako&nbsp;titulní</a>
+        					{else}
+        						<a n:href="Photogallery:unsetCoverPhoto $photo->id" class="small button no-margin">zrušit&nbsp;jako&nbsp;titulní</a>
+        					{/if}
+            			</td>
+            			<td><a n:href="Photogallery:editPhoto $photo->id" class="small secondary button no-margin">upravit</a></td>
+            			<td><a n:href="Photogallery:deletePhoto $photo->id" class="small alert button no-margin confirm">smazat</a></td>
+            		</tr>
+            	{/foreach}
+            </table>
+
+        {else}
+
+            <hr>
+
+            <p class="centerAlign">V albu nejsou žádné fotografie.</p>
+
+        {/if}
+
+		<p class="centerAlign no-margin"><a n:href="Photogallery:uploadPhotos $album->id" class="button small">Přidat fotografie</a></p>
+
+    </div>
+  </div>
