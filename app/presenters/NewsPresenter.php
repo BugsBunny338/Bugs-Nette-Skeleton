@@ -82,7 +82,11 @@ class NewsPresenter extends BugsBasePresenter
         {
             $new = $this->db->table(Authorizator::NEWS_TABLE)->insert($values);
 
-            if ($photo->isOk() and $photo->isImage())
+            if ($photo->getError() == UPLOAD_ERR_NO_FILE)
+            {
+                // no image, keep the old one (if any)
+            }
+            else if ($photo->isOk() and $photo->isImage())
             {
                 $extension = strtolower(pathinfo($photo->name, PATHINFO_EXTENSION));
                 $photoName = $new->id . '.' . $extension;
@@ -90,7 +94,7 @@ class NewsPresenter extends BugsBasePresenter
                 $photo->move($path);
 
                 $image = Image::fromFile($path);
-                $image->resize(400, 400, Image::FIT | Image::SHRINK_ONLY);
+                $image->resize(400, 400, Image::FILL);
                 $image->save($path);
 
                 $new->update(array('photo' => $photoName));
@@ -168,17 +172,25 @@ class NewsPresenter extends BugsBasePresenter
 
         $new = $this->db->table(Authorizator::NEWS_TABLE)->get($values->id);
         $photo = $values['photo'];
+        unset($values['photo']);
 
-        if ($photo->isOk() and $photo->isImage())
+        if ($photo->getError() == UPLOAD_ERR_NO_FILE)
+        {
+            // no image, keep the old one (if any)
+        }
+        else if ($photo->isOk() and $photo->isImage())
         {
             $extension = strtolower(pathinfo($photo->name, PATHINFO_EXTENSION));
             $photoName = $new->id . '.' . $extension;
-            $photo->move(self::UPLOAD_PATH . '/' . $photoName);
-            $values['photo'] = $photoName;
+            $path = self::UPLOAD_PATH . '/' . $photoName;
+            $photo->move($path);
+
+            $image = Image::fromFile($path);
+            $image->resize(400, 400, Image::FILL);
+            $image->save($path);
         }
         else
         {
-            unset($values['photo']);
             $this->flashMessage('Chyba při nahrávání obrázku UPLOAD_ERR: ' . $photo->error, 'error');
         }
 

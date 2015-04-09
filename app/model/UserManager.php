@@ -40,7 +40,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 		list($username, $password) = $credentials;
 
 		/* ***** USE THIS - BEGIN */
-		/* add new user when logging in */
+		/* add new user when trying to log in */
 		// $this->add($username, $password);
 		/* ***** USE THIS - BEGIN */
 
@@ -75,7 +75,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 		$this->database->table(self::TABLE_NAME)->insert(array(
 			self::COLUMN_NAME => $username,
 			self::COLUMN_PASSWORD_HASH => Passwords::hash($password),
-			self::COLUMN_ROLE => \App\Presenters\UsersPresenter::DEFAULT_ROLE
+			self::COLUMN_ROLE => \Authorizator::ROLE_ADMIN
 		));
 	}
 

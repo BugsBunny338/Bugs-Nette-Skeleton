@@ -11,15 +11,17 @@
 	- http://www.tinymce.com/
 
 ## Features
-- TODO
 - force IE edge
 - HTML 5 valid
 - IE only CSS
 - IE8- only CSS
+- ...
 
 ## Concept
 - Different types of Presenters
   - Homepage
+    - bootstrap components example
+  - Editable
     - whole page editable in each language using tinyMCE
     - table 'pages' with columns 'presenter', 'lang' and 'contents'
   - Users
@@ -29,10 +31,19 @@
     - displaying records from db for each language
     - common privileges for all resources
     - table 'events' with column 'lang'
+  - News (example)
+    - like Events, but with picture
+    - table 'news'
   - Files (example)
     - displaying records from db
     - individual privileges for each resource
     - tables 'files' and 'files_users'
+  - Forum (example)
+    - simple forum with posts and comments
+    - table 'forum'
+  - Photogallery
+    - basic photogallery with albums and photos
+    - tables 'albums' and 'photos'
   - Langs (example)
     - template is in corresponding language folder
     - no dynamic data from db, only possible use of Translator
@@ -40,18 +51,21 @@
 - Multilingual support (Translator)
 - ACL
 - User management
-- …
+- ...
 
 ## Before You Begin
-- edit .htaccess (set RewriteBase)
-- edit RouterFactory (supported languages)
-- edit Authorizator
-- edit BasePresenter
-- use UserMangaer.php to create new users
-- edit User.php
+- edit /db.sql (rename database name)
+- edit /app/config/config.neon and config.local.neon (change database name)
+- edit /.htaccess (set RewriteBase if needed)
+- edit /app/router/RouterFactory.php (add/remove supported languages)
+- edit /app/model/Authorizator.php (see *** EDIT HERE *** comments)
+- edit /app/presenters/BugsBasePresenter.php (see *** EDIT HERE *** comments)
+- edit /app/presenters/UsersPresenter.php (see *** EDIT HERE *** comments)
+- use /app/model/UserMangaer.php to create new admin users (see *** USE THIS *** comment)
+-
 
 ## TODO
 - fix MyString::truncate
-- custom form renderer compatible with Foundation
+- custom better form renderer compatible with Foundation
 - fix set_locale (date formats etc.)
-- 
+- ...

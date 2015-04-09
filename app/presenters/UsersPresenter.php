@@ -5,7 +5,8 @@ namespace App\Presenters;
 use Nette,
     App\Model,
     \Authorizator,
-    Nette\Application\UI\Form;
+    Nette\Application\UI\Form,
+    Nette\Utils\Html;
 
 
 /**
@@ -69,6 +70,10 @@ class UsersPresenter extends BugsBasePresenter
                 \App\Model\UserManager::COLUMN_PASSWORD_HASH => Nette\Security\Passwords::hash($password)
             )));
             $this->flashMessage('Uživatel ' . $values->name . ' ' . $values->surname . ' byl přidán!', 'success');
+
+            $this->sendPasswordViaEmail($values->username, $password);
+            $msg = Html::el('p', 'Přihlašovací údaje byly uživateli odeslány na ')->add(Html::el('a', $values->username)->href('mailto:' . $values->username));
+            $this->flashMessage($msg);
         }
         catch (\PDOException $e)
         {
@@ -81,9 +86,6 @@ class UsersPresenter extends BugsBasePresenter
                 $this->flashMessage($e->getMessage(), 'error');
             }
         }
-
-        $this->sendPasswordViaEmail($values->username, $password);
-        $this->flashMessage('Přihlašovací údaje byly uživateli odeslány na <a href="mailto:' . $values->username . '">' . $values->username . '</a>.');
 
         $this->redirectHere();
     }
@@ -282,12 +284,15 @@ class UsersPresenter extends BugsBasePresenter
 
     private function sendPasswordViaEmail($to, $password)
     {
+        $mojeDomena = 'moje-domena.cz';
+        /* ***** EDIT HERE - BEGIN */
         $mail = new Nette\Mail\Message;
-        $mail->setFrom('no-reply@svj.cz')
+        $mail->setFrom('no-reply@' . $mojeDomena)
             ->addTo($to)
             ->addBcc('jiri.zajic@flipcom.cz')
-            ->setSubject('Registrace na svj.cz')
-            ->setBody('Přihlašovacími údaji k webu http://www.svj-u-leskavy.cz jsou Váš email a heslo: ' . $password);
+            ->setSubject('Registrace na ' . $mojeDomena)
+            ->setBody('Přihlašovacími údaji k webu http://www.' . $mojeDomena . ' jsou Váš email a heslo: ' . $password);
+        /* ***** EDIT HERE - END */
         $mailer = new Nette\Mail\SendmailMailer;
         $mailer->send($mail);
     }
