@@ -39,6 +39,7 @@ class SignPresenter extends BugsBasePresenter
 		// $form->addProtection(); // do NOT dare to uncomment this !!! sign:in won't work !!!
 		
 		$form->addText('username', 'Přihlašovací jméno:')
+			->setType('email')
 			->addRule(Form::EMAIL)
 			->setRequired('Prosím vyplňte uživatelské jméno.');
 

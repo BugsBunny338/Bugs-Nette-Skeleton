@@ -22,8 +22,8 @@ nette:
 
 	database:
 		dsn: 'mysql:host=mysql5-4;dbname=bugs-nette-skeleton'
-		user: root
-		password: root
+		user: 'root'
+		password: 'root'
 		options:
 			lazy: yes
 

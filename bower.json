@@ -10,6 +10,8 @@
   "private": true,
   "dependencies": {
     "foundation": "~5.4",
+    "foundation-icon-fonts": "*",
+    "responsive-tables": "*",
     "tinymce": "~4.0"
   },
   "ignore": [

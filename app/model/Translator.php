@@ -15,10 +15,13 @@ class Translator implements \Nette\Localization\ITranslator {
             // -------------------------------------------------------------
             // --------------------------- HOMEPAGE ------------------------
             // -------------------------------------------------------------
-            'translated' =>
-            array(
+            'translated' => array(
                 'cs' => 'přeloženo',
                 'en' => 'translated'
+            ),
+            'curLang' => array(
+                'cs' => 'čeština',
+                'en' => 'English'
             )
         );
 

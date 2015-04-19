@@ -33,8 +33,10 @@
           {else}
             <p>V této sekci nejsou k dispozici žádné soubory ke stažení.</p>
           {/if}
-        {else}
+        {elseif count($all)}
           <p>Pro zobrazení všech souborů ke stažení se <a n:href="Sign:in Files">přihlaste</a>.</p>
+        {else}
+          <p>V této sekci nejsou k dispozici žádné soubory ke stažení.</p>
         {/if}
 
         <hr>
@@ -73,7 +75,13 @@
 
         {/if}
 
-      <br>
+        {if $acl->isAllowed($user->roles, Authorizator::FILES_RESOURCE, 'add')}
+          <hr>
+          <a n:href="Files:upload" class="small button no-margin">Nahrát nový soubor</a>
+        {/if}
+
+        <br>
+        <br>
 
     </div>
   </div>

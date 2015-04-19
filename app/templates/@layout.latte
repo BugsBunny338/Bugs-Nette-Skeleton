@@ -8,7 +8,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="keywords" content="">
         <meta name="description" content="">
 
@@ -28,6 +28,12 @@
 
         {* top-bar breakpoint default by Foundation *}
         <link rel="stylesheet" type="text/css" href="{$basePath}/bower_components/foundation/css/foundation.css" />
+
+        {* foundation icons *}
+        <link rel="stylesheet" type="text/css" href="{$basePath}/bower_components/foundation-icon-fonts/foundation-icons.css">
+
+        {* responsive tables *}
+        <link rel="stylesheet" type="text/css" href="{$basePath}/bower_components/responsive-tables/responsive-tables.css">
 
         <link rel="stylesheet" type="text/css" href="{$basePath}/css/screen.css" />
         <link rel="stylesheet" type="text/css" href="{$basePath}/css/tablet.css" />
@@ -71,7 +77,7 @@
             </div>
 
             <div class="row menu">
-                <nav class="top-bar" data-topbar role="navigation">
+                <nav class="top-bar" data-topbar role="navigation" data-options="custom_back_text:true; back_text:<--">
                     <ul class="title-area">
                         <li class="name">
                             <h1><a n:href="Homepage:default">Foo</a></h1>
@@ -81,27 +87,6 @@
                     </ul>
 
                     <section class="top-bar-section">
-
-                        <!-- Right Nav Section -->
-                        <ul class="right">
-                            {if $user->isLoggedIn()}
-                                {if $acl->isAllowed($user->roles, Authorizator::USERS_RESOURCE, 'manage')}
-                                    <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:">Uživatelé</a></li>
-                                {else}
-                                    <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:edit $user->id">Nastavení</a></li>
-                                {/if}
-                                <li><a n:href="Sign:out $presenter">Odhlásit se</a></li>
-                            {else}
-                                <li{ifCurrent Sign:* } class="active"{/ifCurrent}><a n:href="Sign:in">Přihlášení</a></li>
-                            {/if}
-                            <li class="has-dropdown">
-                                <a href="{link this 'lang' => 'cs'}">&nbsp;</a>
-                                <ul class="dropdown">
-                                    {if $lang != 'cs'}<li><a href="{link this 'lang' => 'cs'}">česky</a></li>{/if}
-                                    {if $lang != 'en'}<li><a href="{link this 'lang' => 'en'}">English</a></li>{/if}
-                                </ul>
-                            </li>
-                        </ul>
 
                         <!-- Left Nav Section -->
                         <ul class="left">
@@ -131,6 +116,27 @@
                             </li>
                             <li{ifCurrent Langs:* } class="active"{/ifCurrent}><a n:href="Langs:">Jazyky</a></li>
                         </ul>
+
+                        <!-- Right Nav Section -->
+                        <ul class="right">
+                            {if $user->isLoggedIn()}
+                                {if $acl->isAllowed($user->roles, Authorizator::USERS_RESOURCE, 'manage')}
+                                    <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:">Uživatelé</a></li>
+                                {else}
+                                    <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:edit $user->id">Nastavení</a></li>
+                                {/if}
+                                <li><a n:href="Sign:out $presenter">Odhlásit se</a></li>
+                            {else}
+                                <li{ifCurrent Sign:* } class="active"{/ifCurrent}><a n:href="Sign:in">Přihlášení</a></li>
+                            {/if}
+                            <li class="has-dropdown">
+                                <a><i class="fi-map size-14"></i><span class="show-for-small-down">{_curLang}</span></a>
+                                <ul class="dropdown">
+                                    {if $lang != 'cs'}<li><a href="{link this 'lang' => 'cs'}">česky</a></li>{/if}
+                                    {if $lang != 'en'}<li><a href="{link this 'lang' => 'en'}">English</a></li>{/if}
+                                </ul>
+                            </li>
+                        </ul>
                     </section>
                 </nav>
             </div>
@@ -153,6 +159,7 @@
             <script type="text/javascript" src="{$basePath}/bower_components/jquery/dist/jquery.min.js"></script>
             <script type="text/javascript" src="{$basePath}/bower_components/modernizr/modernizr.js"></script>
             <script type="text/javascript" src="{$basePath}/bower_components/foundation/js/foundation.min.js"></script>
+            <script type="text/javascript" src="{$basePath}/bower_components/responsive-tables/responsive-tables.js"></script>
             <script type="text/javascript" src="{$basePath}/bower_components/tinymce/tinymce.min.js"></script>
 
             <script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
