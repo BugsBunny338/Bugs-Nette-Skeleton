@@ -8,10 +8,11 @@ use Nette,
     Nette\Application\UI\Form,
     Nette\Image;
 
+define('NewsPresenter_UPLOAD_PATH', BugsBasePresenter::UPLOAD_FOLDER . '/news');
 
 class NewsPresenter extends BugsBasePresenter
 {
-    const UPLOAD_PATH = self::UPLOAD_FOLDER . '/news';
+    const UPLOAD_PATH = NewsPresenter_UPLOAD_PATH;
 
     public function beforeRender()
     {

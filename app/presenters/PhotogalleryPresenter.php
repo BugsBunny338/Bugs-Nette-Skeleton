@@ -8,10 +8,11 @@ use Nette,
     Nette\Application\UI\Form,
     Nette\Image;
 
+define('PhotogalleryPresenter_UPLOAD_PATH', BugsBasePresenter::UPLOAD_FOLDER . '/photos');
 
 class PhotogalleryPresenter extends BugsBasePresenter
 {
-	const UPLOAD_PATH = self::UPLOAD_FOLDER . '/photos';
+	const UPLOAD_PATH = PhotogalleryPresenter_UPLOAD_PATH;
     const THUMB_SUFFIX = '_thumb';
 
     public function beforeRender()

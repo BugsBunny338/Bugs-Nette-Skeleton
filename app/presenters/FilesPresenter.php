@@ -7,10 +7,11 @@ use Nette,
     \Authorizator,
     Nette\Application\UI\Form;
 
+define('FilesPresenter_UPLOAD_PATH', BugsBasePresenter::UPLOAD_FOLDER . '/files');
 
 class FilesPresenter extends BugsBasePresenter
 {
-	const UPLOAD_PATH = self::UPLOAD_FOLDER . '/files';
+	const UPLOAD_PATH = FilesPresenter_UPLOAD_PATH;
 
 	public function renderDefault()
 	{
