@@ -199,7 +199,7 @@ class PhotogalleryPresenter extends BugsBasePresenter
         $form->addUpload('photos', 'Fotografie:', TRUE)
             ->setRequired()
             ->addCondition(Form::FILLED)
-            ->addRule(Form::IMAGE, "Nahrát lze pouze obrázky.");
+            ->addRule(Form::IMAGE, "Některý ze souborů nemá formát obrázku (jpg, png, ...). Nahrát lze pouze obrázky.");
 
         $form->addSubmit('submit', 'Nahrát')
             ->setAttribute('class', 'success small')

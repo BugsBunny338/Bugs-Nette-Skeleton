@@ -131,9 +131,9 @@ class NewsPresenter extends BugsBasePresenter
         $form = new Form;
         $form->addProtection();
 
-        $event = $this->db->table(Authorizator::NEWS_TABLE)->get($this->getParam('id'));
+        $new = $this->db->table(Authorizator::NEWS_TABLE)->get($this->getParam('id'));
 
-        $form->addHidden('id', $event->id);
+        $form->addHidden('id', $new->id);
         $form->addHidden('updatedBy', $this->user->id);
 
         $form->addText('title', 'Nadpis:')
@@ -146,7 +146,7 @@ class NewsPresenter extends BugsBasePresenter
             ->addCondition(Form::FILLED)
             ->addRule(Form::IMAGE, "Nahrát lze pouze obrázek.");
 
-        $form->setDefaults($event);
+        $form->setDefaults($new);
 
         $form->addSubmit('save', 'Uložit změny')
             ->setAttribute('class', 'success small')
@@ -189,6 +189,8 @@ class NewsPresenter extends BugsBasePresenter
             $image = Image::fromFile($path);
             $image->resize(400, 400, Image::FILL);
             $image->save($path);
+
+            $new->update(array('photo' => $photoName));
         }
         else
         {

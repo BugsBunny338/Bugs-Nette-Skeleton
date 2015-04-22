@@ -55,6 +55,7 @@ abstract class BugsBasePresenter extends Nette\Application\UI\Presenter
         $this->template->lang = $this->lang;
         $this->template->langs = $this->languages;
         $this->template->presenter = $this->getName(); // used in layout.latte for Sign:out?redirectTo=$presenter
+        $this->template->action = $this->getAction(); // used in layout.latte as content div class for CSS styling
         $this->template->acl = $this->acl;
 
         $this->template->setTranslator($this->context->translator->setLang($this->lang));

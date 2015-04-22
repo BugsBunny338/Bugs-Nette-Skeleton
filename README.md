@@ -68,4 +68,5 @@
 - fix MyString::truncate
 - custom better form renderer compatible with Foundation
 - fix set_locale (date formats etc.)
+- change alert() calls for something async
 - ...
