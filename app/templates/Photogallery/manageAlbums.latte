@@ -1,54 +1,48 @@
 {block content}
 
-<div class="row">
-    <div class="large-12 columns">
+    <h2>Správa alb</h2>
 
-        <h2>Správa alb</h2>
+    {if count($albums)}
 
-        {if count($albums)}
-
-            {if count($albums) > 10}
-
-                <hr>
-
-                <p class="centerAlign no-margin"><a n:href="Photogallery:addAlbum" class="button small">Přidat album</a></p>
-
-            {/if}
-
-            <table>
-            	<tr>
-    	        	<th>Název</th>
-    	        	<th>Náhled</th>
-    	        	<th>Nahráno</th>
-    	        	<th>Nahrál(a)</th>
-    	        	<th></th>
-                    <th></th>
-    	        	<th></th>
-            	</tr>
-            	{foreach $albums as $album}
-            		{var $addedBy = $users[$album->addedBy]}
-                    {var $photo = $album->photo ? isset($photos[$album->photo]) ? $photos[$album->photo] : NULL}
-            		<tr>
-            			<td>{$album->title}</td>
-            			<td>{if $album->photo}<div class="thumbnail" style="background-image: url({$basePath}/upload/photos/{* {$photo->id}.{$photo->extension} *})">&nbsp;</div>{else}[ není ]{/if}</td>
-            			<td>{$album->added}</td>
-            			<td>{$addedBy->surname},&nbsp;{$addedBy->name}<br>({$addedBy->username})</td>
-            			<td><a n:href="Photogallery:editAlbum $album->id" class="small secondary button no-margin">upravit</a></td>
-                        <td><a n:href="Photogallery:managePhotos $album->id" class="small button no-margin">spravovat&nbsp;fotky</a></td>
-            			<td><a n:href="Photogallery:deleteAlbum $album->id" class="small alert button no-margin confirm">smazat</a></td>
-            		</tr>
-            	{/foreach}
-            </table>
-
-        {else}
+        {if count($albums) > 10}
 
             <hr>
 
-            <p class="centerAlign">V galerii nejsou žádná alba.</p>
+            <p class="centerAlign no-margin"><a n:href="Photogallery:addAlbum" class="button small">Přidat album</a></p>
 
         {/if}
 
-        <p class="centerAlign no-margin"><a n:href="Photogallery:addAlbum" class="button small">Přidat album</a></p>
+        <table>
+        	<tr>
+	        	<th>Název</th>
+	        	<th>Náhled</th>
+	        	<th>Nahráno</th>
+	        	<th>Nahrál(a)</th>
+	        	<th></th>
+                <th></th>
+	        	<th></th>
+        	</tr>
+        	{foreach $albums as $album}
+        		{var $addedBy = $users[$album->addedBy]}
+                {var $photo = $album->photo ? isset($photos[$album->photo]) ? $photos[$album->photo] : NULL}
+        		<tr>
+        			<td>{$album->title}</td>
+        			<td>{if $album->photo}<div class="thumbnail" style="background-image: url({$basePath}/upload/photos/{* {$photo->id}.{$photo->extension} *})">&nbsp;</div>{else}[ není ]{/if}</td>
+        			<td>{$album->added}</td>
+        			<td>{$addedBy->surname},&nbsp;{$addedBy->name}<br>({$addedBy->username})</td>
+        			<td><a n:href="Photogallery:editAlbum $album->id" class="small secondary button no-margin">upravit</a></td>
+                    <td><a n:href="Photogallery:managePhotos $album->id" class="small button no-margin">spravovat&nbsp;fotky</a></td>
+        			<td><a n:href="Photogallery:deleteAlbum $album->id" class="small alert button no-margin confirm">smazat</a></td>
+        		</tr>
+        	{/foreach}
+        </table>
 
-    </div>
-  </div>
+    {else}
+
+        <hr>
+
+        <p class="centerAlign">V galerii nejsou žádná alba.</p>
+
+    {/if}
+
+    <p class="centerAlign no-margin"><a n:href="Photogallery:addAlbum" class="button small">Přidat album</a></p>

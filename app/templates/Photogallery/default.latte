@@ -1,28 +1,20 @@
 {block content}
 
-  <div class="row">
-    <div class="large-12 columns">
+  <h1>Fotogalerie</h1>
 
-      <h1>Fotogalerie</h1>
+  <hr>
 
-      <hr>
-
-      {foreach $albums as $album}
-        <div class="large-3 medium-4 small-6 columns">
-          <a href="#">
-            <div class="album">
-              <div class="cover">{$album->id}</div>
-              <p>
-                <span class="name">{$album->title}</span><br>
-                <span class="created">vytvořeno: {$album->added}</span><br>
-                <span class="updated">aktualizováno: {$album->updated}</span>
-              </p>
-            </div>
-          </a>
+  {foreach $albums as $album}
+    <div class="large-3 medium-4 small-6 columns">
+      <a href="#">
+        <div class="album">
+          <div class="cover">{$album->id}</div>
+          <p>
+            <span class="name">{$album->title}</span><br>
+            <span class="created">vytvořeno: {$album->added}</span><br>
+            <span class="updated">aktualizováno: {$album->updated}</span>
+          </p>
         </div>
-      {/foreach}
-
+      </a>
     </div>
-  </div>
-
-{/block}
+  {/foreach}

@@ -145,8 +145,10 @@
                 <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
             </div>
 
-            <div class="{$presenter} {$action}">
-                {include content}
+            <div class="row {$presenter} {$action}">
+                <div class="large-12 columns">
+                    {include content}
+                </div>
             </div>
 
             <div class="push"></div>

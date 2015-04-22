@@ -1,16 +1,10 @@
 {block content}
 
-  <div class="row">
-    <div class="large-12 columns">
-      {if $acl->isAllowed($user->roles, Authorizator::PAGES_RESOURCE, 'edit')}
-    	 <div class="editable">{!$page}</div>
-      {else}
-        <div>{!$page}</div>
-      {/if}
-		</div>
-		{if $acl->isAllowed($user->roles, Authorizator::PAGES_RESOURCE, 'edit')}
-  		{control editPageForm}
-  	{/if}
-  </div>
-
-{/block}
+  {if $acl->isAllowed($user->roles, Authorizator::PAGES_RESOURCE, 'edit')}
+	 <div class="editable">{!$page}</div>
+  {else}
+    <div>{!$page}</div>
+  {/if}
+	{if $acl->isAllowed($user->roles, Authorizator::PAGES_RESOURCE, 'edit')}
+		{control editPageForm}
+	{/if}

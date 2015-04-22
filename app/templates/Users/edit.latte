@@ -1,17 +1,11 @@
 {block content}
 
-<div class="row">
-    <div class="large-12 columns">
+    <h2>Správa uživatele {$myUser->name} {$myUser->surname}</h2>
 
-        <h2>Správa uživatele {$myUser->name} {$myUser->surname}</h2>
+    {control editUserForm}
 
-        {control editUserForm}
-
-        {if $user->id == $myUser->id}
-        	{control changePasswordForm}
-    	{else}
-    		<a n:href="Users:generateNewPassword $myUser->id" class="small button confirm">Vygenerovat uživateli nové heslo a zaslat na email.</a>
-    	{/if}
-      
-    </div>
-  </div>
+    {if $user->id == $myUser->id}
+    	{control changePasswordForm}
+	{else}
+		<a n:href="Users:generateNewPassword $myUser->id" class="small button confirm">Vygenerovat uživateli nové heslo a zaslat na email.</a>
+	{/if}

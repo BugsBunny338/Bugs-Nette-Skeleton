@@ -1,170 +1,162 @@
 {block content}
 
-<div class="row">
-	<div class="large-12 columns">
+	<h1>Fórum</h1>
 
-		<h1>Fórum</h1>
+	{if !count($posts)}
 
-		{if !count($posts)}
+		<p>Ve fóru nejsou žádné příspěvky.</p>
 
-			<p>Ve fóru nejsou žádné příspěvky.</p>
-
-			<hr>
-
-			<br>
-
-		{/if}
-
-		{if !$user->isLoggedIn()}
-
-			<p class="centerAlign">Pro přidání příspěvku se <a n:href="Sign:in Forum">přihlaste</a>.</p>
-
-		{/if}
-
-		{var $postPrefix = 'post-'}
-		{var $commentPrefix = 'comment-'}
-		{var $allowedToAddPostOrComment = (int) $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'add')}
-
-		{if $allowedToAddPostOrComment}
-			<table class="newPost">
-				<tr>
-					<td class="centerAlign fixedWidth">
-						{$users[$user->id]->name}&nbsp;{$users[$user->id]->surname}
-						<br>
-						<a href="mailto:{$users[$user->id]->username}">{$users[$user->id]->username}</a>
-						<br>
-						<br>
-						{date('Y-m-d H:m:s')}
-					</td>
-					<td><textarea placeholder="Nový příspěvek do fóra..." rows="6" class="editable no-margin"></textarea></td>
-					<td class="control thin">
-						<a href="#" class="small button no-margin" onclick="$('#addPostForm input[type=submit]').click()">vložit</a>
-						<br>
-						<a style="margin-top: 8px" href="#" class="no-margin small button alert" onclick="location.reload()">zrušit</a>
-					</td>
-				</tr>
-			</table>
-
-			<p class="centerAlign newPost no-margin">
-				<a class="small button" href="#" onclick="
-					$('table.newPost').first().show();
-					$('p.newPost').hide();
-					$('table:not(.newPost) tr td.control').hide();
-					$('table:not(.newPost) tr.comment').hide();
-					tinymce.activeEditor.focus();
-					tinymce.activeEditor.selection.select(tinyMCE.activeEditor.getBody(), true);
-					tinymce.activeEditor.selection.collapse(false);
-				">Přidat příspěvek</a>
-			</p>
-
-			{control addPostForm}
-			{control editPostForm}
-			{control addCommentForm}
-			{control editCommentForm}
-		{/if}
-
-		{if count($posts)}
-
-			{foreach $posts as $post}
-
-				{var $numberOfComments = count($comments[$post->id])}
-
-				<table id="{$postPrefix}{$post->id}">
-					<tr>
-						<td class="centerAlign fixedWidth" rowspan="{$numberOfComments + $allowedToAddPostOrComment + 1}">
-							{$users[$post->insertedBy]->name}&nbsp;{$users[$post->insertedBy]->surname}
-							<br>
-							<a href="mailto:{$users[$post->insertedBy]->username}">{$users[$post->insertedBy]->username}</a>
-							<br>
-							<br>
-							{$post->updated}
-						</td>
-						<td class="text">{!$post->text}</td>
-						<td style="width: 1%" class="control">
-							{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'editTheirOwn', $user->id, $post->id)}
-								<a href="#" class="small secondary button no-margin" onclick="
-									var td = $(this).parents('tr').find('td.text'),
-										text = td.html();
-									td.empty();
-									td.append($('<textarea>').addClass('editable'));
-									tinymceInit();
-									tinymce.activeEditor.execCommand('mceInsertContent', false, text);
-									$(this).hide();
-									$(this).parents('td').find('.save').show().css('display', 'block');
-									$(this).parents('table').find('tr.comment').hide();
-									$(this).parent().find('.delete').show().css('display', 'block');
-									$(this).parent().find('.cancel').show().css('display', 'block');
-									$('table:not(#{!$postPrefix}{$post->id}) tr td.control').hide();
-									$('tr.comment').hide();
-									$('tr:not(:first-child) .button').hide();
-									$('p.newPost').hide();
-									tinymce.activeEditor.focus();
-									tinymce.activeEditor.selection.select(tinyMCE.activeEditor.getBody(), true);
-									tinymce.activeEditor.selection.collapse(false);
-								">upravit</a>
-								<a href="#" class="small success button no-margin hidden save" onclick="editPostFormSubmit.call(this)">uložit</a>
-								{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $user->id, $post->id)}
-									<a style="margin-top: 8px" n:href="Forum:delete $post->id" class="small alert button confirm no-margin delete hidden">smazat</a>
-								{/if}
-								<hr class="cancel hidden">
-								<a style="margin-top: 8px" href="#" class="no-margin small button secondary hidden cancel" onclick="location.reload()">zrušit</a>
-							{/if}
-						</td>
-					</tr>
-
-					{if $numberOfComments}
-						{foreach $comments[$post->id] as $comment}
-							<tr class="smallerFont" id="{$commentPrefix}{$comment->id}">
-								<td><a href="mailto:{$users[$comment->insertedBy]->username}">{$users[$comment->insertedBy]->name} {$users[$comment->insertedBy]->surname}</a>: <div class="comment">{$comment->text}</div></td>
-								<td class="centerAlign fixedWidth2 control">
-									{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'editTheirOwn', $user->id, $comment->id)}
-										<a href="#" class="tiny secondary button no-margin" onclick="
-											var div = $(this).parents('tr').find('.comment'),
-												text = div.html();
-											div.empty();
-											div.append($('<input>').attr('type', 'text').val(text).addClass('smallerFont'));
-											tinymceInit();
-											$(this).parents('table').find('tr').last().hide();
-											$(this).parent().find('.cancel').show().css('display', 'block');
-											$(this).parent().find('.delete').show().css('display', 'block');
-											$(this).parent().find('.save').show().css('display', 'block');
-											$(this).hide();
-											$('table:not(#{!$postPrefix}{$post->id}) tr td.control').hide();
-											$('table tr:not(#{!$commentPrefix}{$comment->id}) .button').hide();
-											$('tr.comment').hide();
-											$('tr:first-child .button').hide();
-											$('p.newPost').hide();
-										">upravit</a>
-										<a href="#" class="tiny success button no-margin hidden save" onclick="editCommentFormSubmit.call(this)">uložit</a>
-										{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $user->id, $comment->id)}
-											<a style="margin-top: 8px" n:href="Forum:delete $comment->id" class="no-margin tiny button alert delete hidden confirm">smazat</a>
-										{/if}
-										<hr class="cancel hidden">
-										<a style="margin-top: 8px" href="#" class="no-margin tiny button secondary hidden cancel" onclick="location.reload()">zrušit</a>
-									{/if}
-								</td>
-							</tr>
-						{/foreach}
-					{/if}
-
-					{if $allowedToAddPostOrComment}
-						<tr class="smallerFont comment">
-							<td><input class="smallerFont" placeholder="Přidejte komentář..." type="text" /></td>
-							<td class="centerAlign fixedWidth2 control"><a href="#" class="tiny button success no-margin" onclick="addCommentFormSubmit.call(this)">vložit</a></td>
-						</tr>
-					{/if}
-				</table>
-			{/foreach}
-
-		{else}
-
-			
-
-		{/if}
+		<hr>
 
 		<br>
 
-	</div>
-</div>
+	{/if}
 
-{/block}
+	{if !$user->isLoggedIn()}
+
+		<p class="centerAlign">Pro přidání příspěvku se <a n:href="Sign:in Forum">přihlaste</a>.</p>
+
+	{/if}
+
+	{var $postPrefix = 'post-'}
+	{var $commentPrefix = 'comment-'}
+	{var $allowedToAddPostOrComment = (int) $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'add')}
+
+	{if $allowedToAddPostOrComment}
+		<table class="newPost">
+			<tr>
+				<td class="centerAlign fixedWidth">
+					{$users[$user->id]->name}&nbsp;{$users[$user->id]->surname}
+					<br>
+					<a href="mailto:{$users[$user->id]->username}">{$users[$user->id]->username}</a>
+					<br>
+					<br>
+					{date('Y-m-d H:m:s')}
+				</td>
+				<td><textarea placeholder="Nový příspěvek do fóra..." rows="6" class="editable no-margin"></textarea></td>
+				<td class="control thin">
+					<a href="#" class="small button no-margin" onclick="$('#addPostForm input[type=submit]').click()">vložit</a>
+					<br>
+					<a style="margin-top: 8px" href="#" class="no-margin small button alert" onclick="location.reload()">zrušit</a>
+				</td>
+			</tr>
+		</table>
+
+		<p class="centerAlign newPost no-margin">
+			<a class="small button" href="#" onclick="
+				$('table.newPost').first().show();
+				$('p.newPost').hide();
+				$('table:not(.newPost) tr td.control').hide();
+				$('table:not(.newPost) tr.comment').hide();
+				tinymce.activeEditor.focus();
+				tinymce.activeEditor.selection.select(tinyMCE.activeEditor.getBody(), true);
+				tinymce.activeEditor.selection.collapse(false);
+			">Přidat příspěvek</a>
+		</p>
+
+		{control addPostForm}
+		{control editPostForm}
+		{control addCommentForm}
+		{control editCommentForm}
+	{/if}
+
+	{if count($posts)}
+
+		{foreach $posts as $post}
+
+			{var $numberOfComments = count($comments[$post->id])}
+
+			<table id="{$postPrefix}{$post->id}">
+				<tr>
+					<td class="centerAlign fixedWidth" rowspan="{$numberOfComments + $allowedToAddPostOrComment + 1}">
+						{$users[$post->insertedBy]->name}&nbsp;{$users[$post->insertedBy]->surname}
+						<br>
+						<a href="mailto:{$users[$post->insertedBy]->username}">{$users[$post->insertedBy]->username}</a>
+						<br>
+						<br>
+						{$post->updated}
+					</td>
+					<td class="text">{!$post->text}</td>
+					<td style="width: 1%" class="control">
+						{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'editTheirOwn', $user->id, $post->id)}
+							<a href="#" class="small secondary button no-margin" onclick="
+								var td = $(this).parents('tr').find('td.text'),
+									text = td.html();
+								td.empty();
+								td.append($('<textarea>').addClass('editable'));
+								tinymceInit();
+								tinymce.activeEditor.execCommand('mceInsertContent', false, text);
+								$(this).hide();
+								$(this).parents('td').find('.save').show().css('display', 'block');
+								$(this).parents('table').find('tr.comment').hide();
+								$(this).parent().find('.delete').show().css('display', 'block');
+								$(this).parent().find('.cancel').show().css('display', 'block');
+								$('table:not(#{!$postPrefix}{$post->id}) tr td.control').hide();
+								$('tr.comment').hide();
+								$('tr:not(:first-child) .button').hide();
+								$('p.newPost').hide();
+								tinymce.activeEditor.focus();
+								tinymce.activeEditor.selection.select(tinyMCE.activeEditor.getBody(), true);
+								tinymce.activeEditor.selection.collapse(false);
+							">upravit</a>
+							<a href="#" class="small success button no-margin hidden save" onclick="editPostFormSubmit.call(this)">uložit</a>
+							{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $user->id, $post->id)}
+								<a style="margin-top: 8px" n:href="Forum:delete $post->id" class="small alert button confirm no-margin delete hidden">smazat</a>
+							{/if}
+							<hr class="cancel hidden">
+							<a style="margin-top: 8px" href="#" class="no-margin small button secondary hidden cancel" onclick="location.reload()">zrušit</a>
+						{/if}
+					</td>
+				</tr>
+
+				{if $numberOfComments}
+					{foreach $comments[$post->id] as $comment}
+						<tr class="smallerFont" id="{$commentPrefix}{$comment->id}">
+							<td><a href="mailto:{$users[$comment->insertedBy]->username}">{$users[$comment->insertedBy]->name} {$users[$comment->insertedBy]->surname}</a>: <div class="comment">{$comment->text}</div></td>
+							<td class="centerAlign fixedWidth2 control">
+								{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'editTheirOwn', $user->id, $comment->id)}
+									<a href="#" class="tiny secondary button no-margin" onclick="
+										var div = $(this).parents('tr').find('.comment'),
+											text = div.html();
+										div.empty();
+										div.append($('<input>').attr('type', 'text').val(text).addClass('smallerFont'));
+										tinymceInit();
+										$(this).parents('table').find('tr').last().hide();
+										$(this).parent().find('.cancel').show().css('display', 'block');
+										$(this).parent().find('.delete').show().css('display', 'block');
+										$(this).parent().find('.save').show().css('display', 'block');
+										$(this).hide();
+										$('table:not(#{!$postPrefix}{$post->id}) tr td.control').hide();
+										$('table tr:not(#{!$commentPrefix}{$comment->id}) .button').hide();
+										$('tr.comment').hide();
+										$('tr:first-child .button').hide();
+										$('p.newPost').hide();
+									">upravit</a>
+									<a href="#" class="tiny success button no-margin hidden save" onclick="editCommentFormSubmit.call(this)">uložit</a>
+									{if $acl->isAllowed($user->roles, Authorizator::FORUM_RESOURCE, 'deleteTheirOwn', $user->id, $comment->id)}
+										<a style="margin-top: 8px" n:href="Forum:delete $comment->id" class="no-margin tiny button alert delete hidden confirm">smazat</a>
+									{/if}
+									<hr class="cancel hidden">
+									<a style="margin-top: 8px" href="#" class="no-margin tiny button secondary hidden cancel" onclick="location.reload()">zrušit</a>
+								{/if}
+							</td>
+						</tr>
+					{/foreach}
+				{/if}
+
+				{if $allowedToAddPostOrComment}
+					<tr class="smallerFont comment">
+						<td><input class="smallerFont" placeholder="Přidejte komentář..." type="text" /></td>
+						<td class="centerAlign fixedWidth2 control"><a href="#" class="tiny button success no-margin" onclick="addCommentFormSubmit.call(this)">vložit</a></td>
+					</tr>
+				{/if}
+			</table>
+		{/foreach}
+
+	{else}
+
+		
+
+	{/if}
+
+	<br>

@@ -1,31 +1,25 @@
 {block content}
 
-<div class="row">
-    <div class="large-12 columns">
+    <h2>Správa uživatelů</h2>
 
-        <h2>Správa uživatelů</h2>
-
-        <table class="responsive">
+    <table class="responsive">
+        <tr>
+            <th>Příjmení</th>
+            <th>Jméno</th>
+            <th>E-mail</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {foreach $users as $myUser} {* $user is reserved for currently logged user, therefore $myUser *}
             <tr>
-                <th>Příjmení</th>
-                <th>Jméno</th>
-                <th>E-mail</th>
-                <th></th>
-                <th></th>
+                <td>{$myUser->surname}</td>
+                <td>{$myUser->name}</td>
+                <td><a href="mailto:{$myUser->username}">{$myUser->username}</a></td>
+                <td><a n:href="Users:edit $myUser->id" class="small secondary button no-margin">upravit</a></td>
+                <td><a n:href="Users:delete $myUser->id" class="small alert button no-margin confirm{if $user->id == $myUser->id} disabled{/if}">smazat</a>
+                </td>
             </tr>
-            {foreach $users as $myUser} {* $user is reserved for currently logged user, therefore $myUser *}
-                <tr>
-                    <td>{$myUser->surname}</td>
-                    <td>{$myUser->name}</td>
-                    <td><a href="mailto:{$myUser->username}">{$myUser->username}</a></td>
-                    <td><a n:href="Users:edit $myUser->id" class="small secondary button no-margin">upravit</a></td>
-                    <td><a n:href="Users:delete $myUser->id" class="small alert button no-margin confirm{if $user->id == $myUser->id} disabled{/if}">smazat</a>
-                    </td>
-                </tr>
-            {/foreach}
-        </table>
+        {/foreach}
+    </table>
 
-        <a n:href="Users:add" class="small secondary button">Přidat nového uživatele</a>
-      
-    </div>
-  </div>
+    <a n:href="Users:add" class="small secondary button">Přidat nového uživatele</a>
