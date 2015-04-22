@@ -125,7 +125,7 @@
                                 {else}
                                     <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:edit $user->id">Nastavení</a></li>
                                 {/if}
-                                <li><a n:href="Sign:out $presenter">Odhlásit se</a></li>
+                                <li><a n:href="Sign:out $presenter->name">Odhlásit se</a></li>
                             {else}
                                 <li{ifCurrent Sign:* } class="active"{/ifCurrent}><a n:href="Sign:in">Přihlášení</a></li>
                             {/if}
@@ -145,7 +145,7 @@
                 <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
             </div>
 
-            <div class="row {$presenter} {$action}">
+            <div class="row {$presenter->getName()} {$presenter->getAction()}">
                 <div class="large-12 columns">
                     {include content}
                 </div>
