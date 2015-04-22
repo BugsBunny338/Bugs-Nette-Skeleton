@@ -18,6 +18,8 @@ nette:
 			*: App\*Module\Presenters\*Presenter
 
 	session:
+		cookiePath: '/bugs-nette-skeleton/'
+		cookieDomain: ''
 		expiration: 14 days
 
 	database:

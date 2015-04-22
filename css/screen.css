@@ -126,47 +126,47 @@ input.smallerFont {
 
 /******************************************************************************/
 
-.events time,
-.news time {
+.Events time,
+.News time {
 	float: right;
 }
 
-.news img {
+.News img {
 	width: 150px;
 	float: right;
 	margin: 0 0 10px 10px;
 }
 
-.news h2 img {
+.News h2 img {
 	height: 50px;
 }
 
 /******************************************************************************/
 
-.files ul {
+.Files ul {
 }
 
-.files span {
+.Files span {
 	font-size: 11px;
 	font-style: italic;
 }
 
 /******************************************************************************/
 
-.forum table td.fixedWidth {
+.Forum table td.fixedWidth {
 	width: 180px;
 	background-color: #f9f9f9;
 }
 
-.forum table td.fixedWidth2 {
+.Forum table td.fixedWidth2 {
 	width: 100px !important;
 }
 
-.forum table .button {
+.Forum table .button {
 	width: 96px;
 }
 
-.forum hr {
+.Forum hr {
 	margin: 10px 0 5px 0;
 }
 
@@ -177,17 +177,17 @@ input.smallerFont {
 	display: none;
 }
 
-.forum table.newPost {
+.Forum table.newPost {
 	display: none;
 }
 
-.forum div.comment {
+.Forum div.comment {
 	display: inline;
 }
 
 /******************************************************************************/
 
-.photogallery .album {
+.Photogallery .album {
 	border: 1px solid red;
 	width: 200px;
 	height: 250px;
@@ -197,24 +197,24 @@ input.smallerFont {
 	clear: both;
 }
 
-.photogallery .album .cover {
+.Photogallery .album .cover {
 	border: 1px solid blue;
 	height: 150px;
 	clear: both;
 }
 
-.photogallery p {
+.Photogallery p {
 	text-align: center;
 	margin-top: 10px;
 	line-height: 100%;
 }
 
-.photogallery .name + br {
+.Photogallery .name + br {
 	line-height: 25px;
 }
 
-.photogallery .created,
-.photogallery .updated {
+.Photogallery .created,
+.Photogallery .updated {
 	font-size: 10px;
 }
 
