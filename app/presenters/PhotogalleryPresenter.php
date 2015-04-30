@@ -15,21 +15,27 @@ class PhotogalleryPresenter extends BugsBasePresenter
 	const UPLOAD_PATH = PhotogalleryPresenter_UPLOAD_PATH;
     const THUMB_SUFFIX = '_thumb';
 
-    public function beforeRender()
+    public function renderDefault()
     {
-        $this->template->uploadPath = self::UPLOAD_PATH;
-    }
-
-	public function renderDefault()
-	{
         if (!$this->acl->isAllowed($this->user->roles, Authorizator::ALBUMS_RESOURCE, 'view'))
         {
             $this->flashMessage("K prohlížení této sekce nemáš oprávnění!", 'warning');
             $this->redirectHome();
         }
 
-        $this->template->albums = $this->db->table(Authorizator::ALBUMS_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
-	}
+        $albums = $this->db->table(Authorizator::ALBUMS_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
+        $this->template->albums = $albums;
+
+        $photos = array();
+        foreach($albums as $album)
+        {
+            if ($album->photo !== NULL)
+            {
+                $photos[$album->id] = $this->db->table(Authorizator::PHOTOS_TABLE)->get($album->photo);
+            }
+        }
+        $this->template->photos = $photos;
+    }
 
     public function renderManageAlbums()
     {
@@ -244,7 +250,7 @@ class PhotogalleryPresenter extends BugsBasePresenter
                     $image = Image::fromFile($path);
                     $image->resize(1024, 1024, Image::FIT | Image::SHRINK_ONLY);
                     $image->save($path);
-                    $image->resize(200, 200, Image::FIT | Image::SHRINK_ONLY);
+                    $image->resize(500, 500, Image::FIT | Image::SHRINK_ONLY);
                     $image->save($pathThumb);
 
                     $this->flashMessage("Fotografie '$photo->name' nahrána!", 'success');

@@ -5,10 +5,11 @@
   <hr>
 
   {foreach $albums as $album}
+    {var $photo = $album->photo ? $photos[$album->id] : NULL}
     <div class="large-3 medium-4 small-6 columns">
       <a href="#">
         <div class="album">
-          <div class="cover">{$album->id}</div>
+          <div class="cover"{if $photo} style="background-image: url({$basePath}/{$presenter::UPLOAD_PATH}/{$photo->id}{$presenter::THUMB_SUFFIX}.{$photo->extension})"{/if}>{$album->id}</div>
           <p>
             <span class="name">{$album->title}</span><br>
             <span class="created">vytvořeno: {$album->added}</span><br>

@@ -53,8 +53,16 @@ footer,
 /* ***** EDIT FROM HERE BELOW
 /******************************************************************************/
 
+.NameOfPresenter {
+	/* targetting all presenter's templates with capitalized classname */
+}
+
+.ActionOfPresenter {
+	/* targetting presenter's action with capitalized classname */
+}
+
 .my-custom-class {
-	/* */
+	/* targetting custom elements always all lowercase classname */
 }
 
 /******************************************************************************/

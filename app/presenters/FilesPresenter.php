@@ -44,8 +44,6 @@ class FilesPresenter extends BugsBasePresenter
 
 		$all = $this->db->table(Authorizator::FILES_TABLE)->where(array(self::DELETED_COLUMN => FALSE));
 		$this->template->all = $all;
-
-		$this->template->uploadPath = self::UPLOAD_PATH;
 	}
 
 	public function renderManage()
@@ -122,7 +120,7 @@ class FilesPresenter extends BugsBasePresenter
 
         $file = $values->file;
         unset($values['file']);
-        $values['extension'] = pathinfo($file->name, PATHINFO_EXTENSION);
+        $values['extension'] = strtolower(pathinfo($file->name, PATHINFO_EXTENSION));
 
         if ($file->error == UPLOAD_ERR_OK)
         {

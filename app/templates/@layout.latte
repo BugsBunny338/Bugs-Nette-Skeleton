@@ -145,7 +145,7 @@
                 <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
             </div>
 
-            <div class="row {$presenter->getName()} {$presenter->getAction()}">
+            <div class="row {$presenter->getName()} {$presenter->getAction()|capitalize}">
                 <div class="large-12 columns">
                     {include content}
                 </div>

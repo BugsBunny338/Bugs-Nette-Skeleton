@@ -1,5 +1,5 @@
 {block content}
 
-    <h2>Úprava novinky {$new->title} ze dne {$new->updated->format('j. n. Y')} <img src="{$basePath}/{$uploadPath}/{$new->photo}"></h2>
+    <h2>Úprava novinky {$new->title} ze dne {$new->updated->format('j. n. Y')} <img src="{$basePath}/{$presenter::UPLOAD_PATH}/{$new->photo}"></h2>
 
     {control editNewForm}

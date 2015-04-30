@@ -14,11 +14,6 @@ class NewsPresenter extends BugsBasePresenter
 {
     const UPLOAD_PATH = NewsPresenter_UPLOAD_PATH;
 
-    public function beforeRender()
-    {
-        $this->template->uploadPath = self::UPLOAD_PATH;
-    }
-
 	public function renderDefault()
 	{
         if (!$this->acl->isAllowed($this->user->roles, Authorizator::NEWS_RESOURCE, 'view'))

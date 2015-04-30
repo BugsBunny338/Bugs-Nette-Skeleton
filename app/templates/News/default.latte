@@ -12,7 +12,7 @@
       	<time datetime="{$new->updated->format('Y-m-d')}">{$new->updated->format('j. n. Y')}</time>
       	<h2>{$new->title}</h2>
       	<p>
-      		{if $new->photo}<img src="{$basePath}/{$uploadPath}/{$new->photo}">{/if}
+      		{if $new->photo}<img src="{$basePath}/{$presenter::UPLOAD_PATH}/{$new->photo}">{/if}
       		{!$new->text}
       	</p>
       </div>

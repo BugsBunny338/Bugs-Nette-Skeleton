@@ -26,7 +26,7 @@
         		{var $addedBy = $users[$photo->uploadedBy]}
         		<tr>
         			<td>{$photo->title}</td>
-        			<td><div class="thumbnail" style="background-image: url({$basePath}/upload/photos/{$photo->id}.{$photo->extension})">&nbsp;</div></td>
+        			<td><div class="thumbnail" style="background-image: url({$basePath}/upload/photos/{$photo->id}{$presenter::THUMB_SUFFIX}.{$photo->extension})">&nbsp;</div></td>
         			<td>{$photo->uploaded}</td>
         			<td>{$addedBy->surname},&nbsp;{$addedBy->name}<br>({$addedBy->username})</td>
         			<td>

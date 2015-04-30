@@ -230,6 +230,7 @@ class UsersPresenter extends BugsBasePresenter
         $newPassword = $this->generateRandomString();
         $user->update(array(\App\Model\UserManager::COLUMN_PASSWORD_HASH => Nette\Security\Passwords::hash($newPassword)));
         $this->sendPasswordViaEmail($user->username, $newPassword);
+        $this->flashMessage('Uživateli bylo vygenerováno nové heslo a zasláno na jeho emailovou adresu.');
         $this->redirectHere();
     }
 
@@ -284,7 +285,7 @@ class UsersPresenter extends BugsBasePresenter
 
     private function sendPasswordViaEmail($to, $password)
     {
-        $mojeDomena = 'moje-domena.cz';
+        $mojeDomena = 'moje_domena.cz'; // no dashes in domain !!! (no idea why :-()
         /* ***** EDIT HERE - BEGIN */
         $mail = new Nette\Mail\Message;
         $mail->setFrom('no-reply@' . $mojeDomena)
