@@ -37,6 +37,24 @@ class PhotogalleryPresenter extends BugsBasePresenter
         $this->template->photos = $photos;
     }
 
+    public function renderAlbum($id)
+    {
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::ALBUMS_RESOURCE, 'view'))
+        {
+            $this->flashMessage("K prohlížení alb nemáš oprávnění!", 'warning');
+            $this->redirectHome();
+        }
+
+        $this->template->photos = $this->db->table(Authorizator::PHOTOS_TABLE)->where(array(
+            'album' => $id,
+            self::DELETED_COLUMN => 0
+        ));
+
+        $album = $this->db->table(Authorizator::ALBUMS_TABLE)->get($id);
+        $this->template->album = $album;
+        $this->template->backLink = $album->player === NULL ? 'Photogallery:' : 'Players:';
+    }
+    
     public function renderManageAlbums()
     {
         if (!$this->acl->isAllowed($this->user->roles, Authorizator::ALBUMS_RESOURCE, 'manage'))

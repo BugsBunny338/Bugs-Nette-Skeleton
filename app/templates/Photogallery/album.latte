@@ -1,0 +1,32 @@
+{block content}
+
+  <h2>{$album->title}<time>vytvořeno: {$album->added->format('d.n.Y')}</time></h2>
+
+  {if count($photos)}
+    {foreach $photos as $photo}
+      <div class="large-3 medium-4 small-12 columns">
+        <a title="{$album->title}: {$photo->title}" href="{$basePath}/{$presenter::UPLOAD_PATH}/{$photo->id}.{$photo->extension}" class="swipebox">
+          <div class="photo clearfix">
+            <div class="img" style="background-image: url({$basePath}/{$presenter::UPLOAD_PATH}/{$photo->id}{$presenter::THUMB_SUFFIX}.{$photo->extension})"></div>
+            <p>{$photo->title}</p>
+          </div>
+        </a>
+      </div>
+    {/foreach}
+  {else}
+    <p>V tomto albu nejsou žádné fotky.</p>
+  {/if}
+
+  {* if came from this website, go back using JScript history; otherwise go back using PHP *}
+  <p class="small-12 columns no-margin">
+    <br>
+    <a class="button small secondary" n:href="$backLink" onclick="javascript:
+      var basePath = {$basePath},
+          url = document.referrer;
+      if (url.indexOf(basePath) != -1)
+      {
+          window.history.back();
+          return false;
+      }
+    ">jít zpět</a>
+  </p>

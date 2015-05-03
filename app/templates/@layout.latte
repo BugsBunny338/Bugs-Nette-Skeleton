@@ -35,6 +35,9 @@
         {* responsive tables *}
         <link rel="stylesheet" type="text/css" href="{$basePath}/bower_components/responsive-tables/responsive-tables.css">
 
+        {* swipebox *}
+        <link rel="stylesheet" type="text/css" href="{$basePath}/bower_components/swipebox/swipebox.css">
+
         <link rel="stylesheet" type="text/css" href="{$basePath}/css/screen.css" />
         <link rel="stylesheet" type="text/css" href="{$basePath}/css/tablet.css" />
         <link rel="stylesheet" type="text/css" href="{$basePath}/css/desktop.css" />
@@ -165,41 +168,54 @@
             <script type="text/javascript" src="{$basePath}/bower_components/foundation/js/foundation.min.js"></script>
             <script type="text/javascript" src="{$basePath}/bower_components/responsive-tables/responsive-tables.js"></script>
             <script type="text/javascript" src="{$basePath}/bower_components/tinymce/tinymce.min.js"></script>
+            <script type="text/javascript" src="{$basePath}/bower_components/swipebox/jquery.swipebox.min.js"></script>
 
             <script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
             <script type="text/javascript" src="{$basePath}/js/main.js"></script>
 
             <script type="text/javascript">
+                /* Don't be an ass, use strict! */
+                "use strict";
 
                 // foundation
                 $(document).foundation();
 
                 // tinyMCE init
-                var plugins = ["textcolor", "paste", "hr"],
-                    toolbar = "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | styleselect | forecolor | hr";
-                var tinymceInit = function() {
-                    tinymce.init({
-                        selector: "div.editable",
-                        inline: true,
-                        menubar: false,
-                        toolbar: toolbar,
-                        // valid_elements: 'h1,h2,hr,p,strong,span',
-                        plugins: plugins,
-                        paste_auto_cleanup_on_paste: true
-                        // , entity_encoding: 'raw'
-                    });
-                    tinymce.init({
-                        selector: "textarea.editable",
-                        inline: false,
-                        menubar: false,
-                        toolbar: toolbar,
-                        // valid_elements: 'h1,h2,hr,p,strong,span',
-                        plugins: plugins,
-                        paste_auto_cleanup_on_paste: true
-                        // , entity_encoding: 'raw'
-                    });
-                };
+                var tinymceInit;
+                (function() {
+                    var plugins = ["textcolor", "paste", "hr"],
+                        toolbar = "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | styleselect | forecolor | hr";
+                    tinymceInit = function() {
+                        tinymce.init({
+                            selector: "div.editable",
+                            inline: true,
+                            menubar: false,
+                            toolbar: toolbar,
+                            // valid_elements: 'h1,h2,hr,p,strong,span',
+                            plugins: plugins,
+                            paste_auto_cleanup_on_paste: true
+                            // , entity_encoding: 'raw'
+                        });
+                        tinymce.init({
+                            selector: "textarea.editable",
+                            inline: false,
+                            menubar: false,
+                            toolbar: toolbar,
+                            // valid_elements: 'h1,h2,hr,p,strong,span',
+                            plugins: plugins,
+                            paste_auto_cleanup_on_paste: true
+                            // , entity_encoding: 'raw'
+                        });
+                    };
+                }());
                 tinymceInit();
+
+                // swipebox
+                $(function() {
+                    $(".swipebox").swipebox({
+                        hideBarsDelay : 0 // 0 to always show caption and action bar
+                    });
+                });
 
                 // on editProjectForm submit
                 $('#editPageForm').submit(function(event) {
