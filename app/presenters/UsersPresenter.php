@@ -285,7 +285,7 @@ class UsersPresenter extends BugsBasePresenter
 
     private function sendPasswordViaEmail($to, $password)
     {
-        $mojeDomena = 'moje_domena.cz'; // no dashes in domain !!! (no idea why :-()
+        $mojeDomena = 'moje-domena.cz'; // make sure MX record(s) are good-to-go
         /* ***** EDIT HERE - BEGIN */
         $mail = new Nette\Mail\Message;
         $mail->setFrom('no-reply@' . $mojeDomena)
