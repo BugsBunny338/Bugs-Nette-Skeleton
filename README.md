@@ -61,7 +61,7 @@
 - edit /app/model/Authorizator.php (see *** EDIT HERE *** comments)
 - edit /app/presenters/BugsBasePresenter.php (see *** EDIT HERE *** comments)
 - edit /app/presenters/UsersPresenter.php (see *** EDIT HERE *** comments)
-- use /app/model/UserMangaer.php to create new admin users (see *** USE THIS *** comment)
+- use /app/model/UserManager.php to create new admin users (see *** USE THIS *** comment)
 -
 
 ## TODO

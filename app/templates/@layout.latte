@@ -180,6 +180,17 @@
                 // foundation
                 $(document).foundation();
 
+                // bugfix: http://foundation.zurb.com/forum/posts/1679-top-bar-double-click-on-drop-down
+                if (Modernizr.touch)
+                {
+                    $('#menu a').on('click touchend', function(e) {
+                        var el = $(this),
+                            link = el.attr('href');
+
+                        window.location = link;
+                    });
+                }
+
                 // tinyMCE init
                 var tinymceInit;
                 (function() {

@@ -106,7 +106,7 @@ class Authorizator extends Nette\Object implements NS\IAuthorizator
 
         if (!is_array($roles))
         {
-            $roles = [$roles];
+            $roles = array($roles);
         }
 
         // admin usually has ***TheirOwn permissions
