@@ -15,6 +15,7 @@
         <table class="responsive">
         	<tr>
             	<th>Název</th>
+            	<th>Štítky</th>
             	<th>Popis</th>
             	<th>Nahráno&nbsp;kdy</th>
             	<th>Nahráno&nbsp;kým</th>
@@ -28,6 +29,7 @@
         		{var $owner = $users[$file->owner]}
         		<tr>
         			<td><a n:href="Files:get $file->id">{$file->name}.{$file->extension}</a></td>
+                    <td class="centerAlign">{!array($filesLabels, $file)|createFilesLabels}</td>
         			<td>{$file->description}</td>
         			<td>{$file->uploaded}</td>
         			<td>{$uploadedBy->surname},&nbsp;{$uploadedBy->name}<br>({$uploadedBy->username})</td>

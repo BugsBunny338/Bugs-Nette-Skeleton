@@ -1,15 +1,24 @@
 {block content}
 
-  <h1>Soubory ke stažení</h1>
+    <h1>
+        Soubory ke stažení
+        <div class="labels-outer">
+            {!$labels|createLabels}<a href="#" onclick="
+                $('.labels a').removeClass('active');
+                $('.files li').show();
+                return false;
+            " style="width: 28px; min-width: 28px;"><i class="fi-x size-12"></i></a>
+        </div>
+    </h1>
 
   <hr>
 
   <h2>Veřejné</h2>
 
   {if count($public)}
-    <ul>
+    <ul class="files">
       {foreach $public as $file}
-        <li><a n:href="Files:get $file->id">{$file->name}</a> <span>({$file->extension}, popis: {$file->description}, nahráno: {$file->uploaded->format('j. n. Y')})</span></li>
+        <li>{!array($filesLabels, $file)|linkFile}</li>
       {/foreach}
     </ul>
   {else}
@@ -22,9 +31,9 @@
 
   {if $user->isLoggedIn()}
     {if count($registered)}
-      <ul>
+      <ul class="files">
         {foreach $registered as $file}
-          <li><a n:href="Files:get $file->id">{$file->name}</a> <span>({$file->extension}, popis: {$file->description}, nahráno: {$file->uploaded->format('j. n. Y')})</span></li>
+          <li>{!array($filesLabels, $file)|linkFile}</li>
         {/foreach}
       </ul>
     {else}
@@ -41,11 +50,11 @@
   {if $user->isLoggedIn()}
 
     <h2>Soukromé</h2>
-    
+
     {if count($private)}
-      <ul>
+      <ul class="files">
         {foreach $private as $file}
-          <li><a n:href="Files:get $file->id">{$file->name}</a> <span>({$file->extension}, popis: {$file->description}, nahráno: {$file->uploaded->format('j. n. Y')})</span></li>
+          <li>{!array($filesLabels, $file)|linkFile}</li>
         {/foreach}
       </ul>
     {else}
@@ -59,9 +68,9 @@
       <h2>Všechny soubory v systému (<a n:href="Files:manage">spravovat</a>)</h2>
 
       {if count($all)}
-        <ul>
+        <ul class="files">
           {foreach $all as $file}
-            <li><a n:href="Files:get $file->id">{$file->name}</a> <span>({$file->extension}, popis: {$file->description}, nahráno: {$file->uploaded->format('j. n. Y')})</span></li>
+            <li>{!array($filesLabels, $file)|linkFile}</li>
           {/foreach}
         </ul>
       {else}

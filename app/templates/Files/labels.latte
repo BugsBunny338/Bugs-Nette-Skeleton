@@ -1,0 +1,87 @@
+{block content}
+
+    {control addLabelForm}
+    {control updateLabelForm}
+
+    <script>
+        var saveBtn = function(callback) {
+            return '<a href=\'#\' onclick=\'' + callback + '.call(this)\' class=\'small success button no-margin\' style=\'width: 100%\'>uložit</a>';
+        };
+        var cancelBtn = function() {
+            return '<a href=\'#\' onclick=\'location.reload(); return false;\' class=\'small alert button no-margin\' style=\'width: 100%\'>zrušit</a>';
+        };
+        var colorInput = function(color) {
+            return '<input type=\'color\' ' + (color ? 'value=\'' + color + '\'' : '') + '/>';
+        }
+        var disableAllEditBtns = function(element) {
+            $(element).find('tr').find('td:nth-last-child(2) a').addClass('disabled').attr('onclick', null).click(function() { return false; });
+        }
+        var disableAllDeleteBtns = function(element) {
+            $(element).find('tr').find('td:nth-last-child(1) a').addClass('disabled').unbind('click').click(function() { return false; });
+        }
+    </script>
+
+    <h2>Správa štítků</h2>
+
+        <table class="responsive main">
+        	<tr>
+            	<th>Štítek</th>
+            	<th>Barva</th>
+            	<th>Použit</th>
+                <th></th>
+            	<th></th>
+        	</tr>
+
+            {if count($labels)}
+
+            	{foreach $labels as $label}
+            		<tr data-id="{$label->id}">
+            			<td>{$label->label}</td>
+            			<td><input type="color" value="{$label->color}" disabled="disabled" /></td>
+            			<td>{isset($labelUsage[$label->id]) ? $labelUsage[$label->id] : '0'}x</td>
+            			<td><a href="#" class="small secondary button no-margin" style="width: 100%" onclick="
+                            var labelCell = $(this).parents('tr').find('td:nth-child(1)'),
+                                labelCellText = labelCell.text(),
+                                colorCell = $(this).parents('tr').find('td:nth-child(2)'),
+                                colorCellVal = colorCell.find('input').val();
+                            $('p.newLabel').hide();
+                            labelCell.text('');
+                            labelCell.append('<input type=\'text\' placeholder=\'název štítku\' value=\'' + labelCellText + '\' />');
+                            colorCell.find('input').remove();
+                            colorCell.append(colorInput(colorCellVal));
+                            disableAllDeleteBtns('table.main');
+                            disableAllEditBtns('table.main');
+                            $(this).parent('td').find('a').hide();
+                            $(this).parent('td').append($(cancelBtn()));
+                            $(this).parents('tr').find('td:last-child a').hide();
+                            $(this).parents('tr').find('td:last-child').append($(saveBtn('updateLabelFormSubmit')));
+                            return false;
+                        ">upravit</a></td>
+            			<td><a n:href="Files:deleteLabel $label->id" class="small alert button no-margin confirm">smazat</a></td>
+            		</tr>
+            	{/foreach}
+
+            {else}
+
+                {*<hr>*}
+
+                <tr class="no-labels"><td colspan="5" class="centerAlign">V systému nejsou žádné štítky.</td></tr>
+
+            {/if}
+
+
+        </table>
+
+
+    <p class="newLabel centerAlign no-margin"><a href="#" class="button small" onclick="
+        $(this).hide();
+        var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16),
+            labelInput = function() {
+                return '<input type=\'text\' placeholder=\'název štítku\' />';
+            };
+        disableAllDeleteBtns('table.main');
+        disableAllEditBtns('table.main');
+        $('table.main .no-labels').hide();
+        $('table.main tbody').append($('<tr><td>' + labelInput() + '</td><td>' + colorInput(randomColor) + '</td><td>0x</td><td>' + saveBtn('addLabelFormSubmit') + '</td><td>' + cancelBtn() + '</td></tr>'));
+        return false;
+    ">Vytvořit nový štítek</a></p>

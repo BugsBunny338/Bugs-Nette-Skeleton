@@ -64,13 +64,14 @@
 
     <body>
         <script> document.documentElement.className+=' js' </script>
+        <script type="text/javascript" src="{$basePath}/bower_components/jquery/dist/jquery.min.js"></script>
 
         <!--[if (lte IE 8)]>
         <div class="fallback">
           <p>Používáte příliš starou verzi prohlížeče Internet Explorer.<br><br>Prosím, aktualizujte svůj prohlížeč na verzi 9 a vyšší; nebo použijte některý z jiných moderních prohlížečů, jako např. Google Chrome, Mozilla Firefox nebo Safari.</p>
         </div>
         <![endif]-->
-        
+
         <div class="wrapper">
 
             <div class="row">
@@ -107,6 +108,7 @@
                                 <ul class="dropdown">
                                     <li{ifCurrent Files:manage } class="active"{/ifCurrent}><a n:href="Files:manage">Spravovat soubory</a></li>
                                     <li{ifCurrent Files:upload } class="active"{/ifCurrent}><a n:href="Files:upload">Nahrát soubor</a></li>
+                                    <li{ifCurrent Files:labels } class="active"{/ifCurrent}><a n:href="Files:labels">Spravovat štítky</a></li>
                                 </ul>
                             </li>
                             <li{ifCurrent Forum:* } class="active"{/ifCurrent}><a n:href="Forum:">Fórum</a></li>
@@ -163,7 +165,6 @@
         </div>
 
         {block scripts}
-            <script type="text/javascript" src="{$basePath}/bower_components/jquery/dist/jquery.min.js"></script>
             <script type="text/javascript" src="{$basePath}/bower_components/modernizr/modernizr.js"></script>
             <script type="text/javascript" src="{$basePath}/bower_components/foundation/js/foundation.min.js"></script>
             <script type="text/javascript" src="{$basePath}/bower_components/responsive-tables/responsive-tables.js"></script>
@@ -228,6 +229,23 @@
                     });
                 });
 
+                // filter files by labels
+                if ($('.labels a').length) {
+                    $('.labels a').click(function(e) {
+                        var label = $(this);
+                        $('.labels a').removeClass('active');
+                        label.addClass('active');
+                        $('.files li').hide();
+                        $('.files li a[data-label-id=' + label.data('label-id') + ']').map(function() {
+                            $(this).parents('li').show();
+                        });
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                } else {
+                    $('.labels-outer a').hide();
+                }
+
                 // on editPageForm submit
                 $('#editPageForm').submit(function(event) {
                     $(this).find('input[name="contents"]').val($('.editable').html());
@@ -251,7 +269,7 @@
 
                 // on addCommentForm submit
                 var addCommentFormSubmit = function() {
-                    var prefix = 'post-'; // post prefix here, not comment --> adding comment to post
+                    var prefix = 'post-'; // post prefix here, not comment --> adding comment to a post
                     var that = this;
                     $('#addCommentForm').submit(function(event) {
                         $(this).find('input[name="parent"]').val($(that).parents('table').attr('id').substr(prefix.length));
@@ -271,6 +289,26 @@
                     $('#editCommentForm input[type=submit]').click();
                 };
 
+                // on addLabelForm submit
+                var addLabelFormSubmit = function() {
+                    var that = this;
+                    $('#addLabelForm').submit(function(event) {
+                        $(this).find('input[name="label"]').val($(that).parents('tr').find('input[type=text]').val());
+                        $(this).find('input[name="color"]').val($(that).parents('tr').find('input[type=color]').val());
+                    });
+                    $('#addLabelForm input[type=submit]').click();
+                };
+
+                // on updateLabelForm submit
+                var updateLabelFormSubmit = function() {
+                    var that = this;
+                    $('#updateLabelForm').submit(function(event) {
+                        $(this).find('input[name="id"]').val($(that).parents('tr').data('id'));
+                        $(this).find('input[name="label"]').val($(that).parents('tr').find('input[type=text]').val());
+                        $(this).find('input[name="color"]').val($(that).parents('tr').find('input[type=color]').val());
+                    });
+                    $('#updateLabelForm input[type=submit]').click();
+                };
             </script>
         {/block}
     </body>

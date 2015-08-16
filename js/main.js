@@ -24,7 +24,7 @@ $(function(){
 
 	// form delete confirmation
 	$(function() {
-	    $( ".confirm" ).click(function(event) {
+	    $('.confirm').click(function(event) {
 	        var result = confirm("Jste si jistý/á?");
 	        if (!result)
 	        {

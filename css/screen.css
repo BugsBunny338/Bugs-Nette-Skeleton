@@ -151,12 +151,74 @@ input.smallerFont {
 
 /******************************************************************************/
 
+.Files .labels-outer,
+.Files .labels {
+    display: inline-block;
+}
+
+.Files h1 .labels-outer {
+	float: right;
+}
+
+.Files .labels {
+    margin-right: 5px;
+}
+
+.Files table .labels {
+    text-align: center;
+}
+
+.Files h1 .labels-outer a {
+    padding: 5px;
+    min-width: 60px;
+    border: 1px solid black;
+}
+
+.Files h1 .labels a.active,
+.Files h1 .labels a:hover {
+    text-decoration: underline;
+}
+
+.Files .labels a,
+.Files .labels-outer a {
+    padding: 0 3px;
+	border-radius: 5px;
+	font-size: 12px;
+	display: inline-block;
+	text-align: center;
+    color: black; /* might be changed by JScript to white if label color too dark, see Files/default.latte */
+}
+
+.Files h1 .labels a:not(:last-child),
+.Files li .labels a:not(:last-child) {
+	margin-right: 5px;
+}
+
+.Files .labels a:hover,
+.Files .labels a.active {
+	background-color: #eee;
+}
+
+.Files select[multiple] {
+    height: 100px;
+}
+
 .Files ul {
 }
 
 .Files span {
 	font-size: 11px;
 	font-style: italic;
+}
+
+.Files input[type=color] {
+	padding: 2px;
+	border: 0;
+}
+
+#addLabelForm,
+#updateLabelForm {
+	display: none;
 }
 
 /******************************************************************************/
