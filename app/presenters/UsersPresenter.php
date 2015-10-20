@@ -15,7 +15,10 @@ use Nette,
 class UsersPresenter extends BugsBasePresenter
 {
     const DEFAULT_ROLE = Authorizator::ROLE_REGISTERED;
-    
+    /* ***** EDIT HERE - BEGIN */
+    const MY_DOMAIN = 'moje-domena.cz'; // make sure MX record(s) are good-to-go
+    /* ***** EDIT HERE - END */
+
     public function renderDefault()
     {
         if (!$this->acl->isAllowed($this->user->roles, Authorizator::USERS_RESOURCE, 'manage'))
@@ -97,7 +100,7 @@ class UsersPresenter extends BugsBasePresenter
             $this->flashMessage("Ke správě ostatních uživatelů nemáte oprávnění!", 'warning');
             $this->redirectHere('edit', $this->user->id);
         }
-        
+
         $this->template->myUser = $this->db->table(Authorizator::USERS_TABLE)->get($id);
     }
 
@@ -202,7 +205,7 @@ class UsersPresenter extends BugsBasePresenter
             $this->flashMessage("K úpravě hesla tohoto uživatele nemáš oprávnění!", 'warning');
             $this->redirectHere();
         }
-        
+
         $user = $this->db->table(Authorizator::USERS_TABLE)->get($values->id);
 
         if (\Nette\Security\Passwords::verify($values->oldPassword, $user[\App\Model\UserManager::COLUMN_PASSWORD_HASH]))
@@ -271,6 +274,77 @@ class UsersPresenter extends BugsBasePresenter
         $this->redirectHere();
     }
 
+    public function renderBulkEmail() {
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::EMAILS_RESOURCE, 'send'))
+        {
+            $this->flashMessage("K odeslání hromadného emailu nemáš oprávnění!", 'warning');
+            $this->redirectHere();
+        }
+
+        $this->template->users = $this->db->table(Authorizator::USERS_TABLE)->where(array(self::DELETED_COLUMN => FALSE))->order('surname, name');
+    }
+
+    protected function createComponentSendBulkEmailForm()
+    {
+        $form = new Form;
+        $form->addProtection();
+        $form->getElementPrototype()->id = 'sendBulkEmailForm';
+
+        $users = $this->db->table(Authorizator::USERS_TABLE)->where(array(
+            self::DELETED_COLUMN => FALSE
+        ));
+
+        foreach ($users as $user) {
+            $form->addCheckbox($user->id, ' ' . $user->surname . ', ' . $user->name . ' (' . $user->username . ')')
+                ->setDefaultValue(true);
+        }
+
+        $form->addTextarea('text', 'Text:', NULL, 8)
+            ->setAttribute('class', 'editable')
+            ->setAttribute('placeholder', "Vážení uživatelé, ...")
+            ->setRequired();
+
+        $form->addText('subject', 'Předmět:')
+            ->setAttribute('placeholder', "Předmět emailu")
+            ->setRequired();
+
+        $form->addSubmit('send', 'Odeslat hromadný email')
+            ->setAttribute('class', 'button small action')
+            ->onClick[] = callback($this, 'sendBulkEmailFormSubmitted');
+
+        return $form;
+    }
+
+    public function sendBulkEmailFormSubmitted($submitButton)
+    {
+        $values = $submitButton->getForm()->getValues();
+        $text = $values->text;
+        unset($values->text);
+        $subject = $values->subject;
+        unset($values->subject);
+
+        if (!$this->acl->isAllowed($this->user->roles, Authorizator::EMAILS_RESOURCE, 'send'))
+        {
+            $this->flashMessage("K odeslání hromadného emailu nemáš oprávnění!", 'warning');
+            $this->redirectHere();
+        }
+
+        $to = array();
+        foreach ($values as $id => $checked) {
+            if ($checked) {
+                array_push($to, $this->db->table(Authorizator::USERS_TABLE)->get($id)->username);
+            }
+        }
+
+        if (!count($to)) {
+            $this->flashMessage("Je třeba uvést alespoň jednoho adresáta!", 'warning');
+        } else {
+            $this->sendBulkEmail($to, $subject, $text);
+            $this->flashMessage("Mail byl úspěšně odeslán!", 'success');
+            $this->redirectHere();
+        }
+    }
+
     private function generateRandomString($length = 6)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -285,15 +359,28 @@ class UsersPresenter extends BugsBasePresenter
 
     private function sendPasswordViaEmail($to, $password)
     {
-        $mojeDomena = 'moje-domena.cz'; // make sure MX record(s) are good-to-go
         /* ***** EDIT HERE - BEGIN */
         $mail = new Nette\Mail\Message;
-        $mail->setFrom('no-reply@' . $mojeDomena)
+        $mail->setFrom('no-reply@' . self::MY_DOMAIN)
             ->addTo($to)
             ->addBcc('jiri.zajic@flipcom.cz')
-            ->setSubject('Registrace na ' . $mojeDomena)
-            ->setBody('Přihlašovacími údaji k webu http://www.' . $mojeDomena . ' jsou Váš email a heslo: ' . $password);
+            ->setSubject('Registrace na ' . self::MY_DOMAIN)
+            ->setBody('Přihlašovacími údaji k webu http://www.' . self::MY_DOMAIN . ' jsou Váš email a heslo: ' . $password);
         /* ***** EDIT HERE - END */
+        $mailer = new Nette\Mail\SendmailMailer;
+        $mailer->send($mail);
+    }
+
+    private function sendBulkEmail($to, $subject, $text) {
+        $mail = new Nette\Mail\Message;
+        /* ***** EDIT HERE - BEGIN */
+        $mail->setFrom('administrator@' . self::MY_DOMAIN);
+        /* ***** EDIT HERE - END */
+        $mail->setSubject($subject)
+            ->setHTMLBody($text);
+        foreach ($to as $recipient) {
+            $mail->addTo($recipient);
+        }
         $mailer = new Nette\Mail\SendmailMailer;
         $mailer->send($mail);
     }
