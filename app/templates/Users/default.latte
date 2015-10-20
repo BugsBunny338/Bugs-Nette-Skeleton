@@ -2,6 +2,10 @@
 
     <h2>Správa uživatelů</h2>
 
+    {if count($users) > 8}
+        <a n:href="Users:add" class="small secondary button">Přidat nového uživatele</a>
+    {/if}
+
     <table class="responsive">
         <tr>
             <th>Příjmení</th>

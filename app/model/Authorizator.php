@@ -34,6 +34,7 @@ class Authorizator extends Nette\Object implements NS\IAuthorizator
     const PHOTOS_RESOURCE = 'photo';
     const ALBUMS_TABLE = 'albums';
     const ALBUMS_RESOURCE = 'album';
+    const EMAILS_RESOURCE = 'email';
     /* ***** EDIT HERE - END */
 
     private $db;
@@ -73,6 +74,7 @@ class Authorizator extends Nette\Object implements NS\IAuthorizator
         $acl->addResource(self::FORUM_RESOURCE);
         $acl->addResource(self::PHOTOS_RESOURCE);
         $acl->addResource(self::ALBUMS_RESOURCE);
+        $acl->addResource(self::EMAILS_RESOURCE);
         /* ***** EDIT HERE - END */
 
         // $acl->addResource('ownership'); // pri vkladani novyho Resource muze urcit majitele
@@ -97,7 +99,8 @@ class Authorizator extends Nette\Object implements NS\IAuthorizator
             'edit',
             'editTheirOwn',
             'delete',
-            'deleteTheirOwn'
+            'deleteTheirOwn',
+            'send'
         ));
         /* ***** EDIT HERE - END */
 

@@ -126,7 +126,12 @@
                         <ul class="right">
                             {if $user->isLoggedIn()}
                                 {if $acl->isAllowed($user->roles, Authorizator::USERS_RESOURCE, 'manage')}
-                                    <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:">Uživatelé</a></li>
+                                <li class="has-dropdown{ifCurrent Users:* } active{/ifCurrent}">
+                                        <a n:href="Users:">Uživatelé</a>
+                                        <ul class="dropdown">
+                                        <li{ifCurrent Users:bulkEmail } class="active"{/ifCurrent}><a n:href="Users:bulkEmail">Hromadný email</a></li>
+                                        </ul>
+                                    </li>
                                 {else}
                                     <li{ifCurrent Users:* } class="active"{/ifCurrent}><a n:href="Users:edit $user->id">Nastavení</a></li>
                                 {/if}
